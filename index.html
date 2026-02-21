@@ -1,491 +1,277 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NexYield — Next Generation Yield Protocol</title>
+<title>NexYield — 下一代收益协议</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg:       #060810;
-  --bg2:      #0b0f1c;
-  --bg3:      #111629;
-  --accent:   #00e5ff;
-  --accent2:  #7b5cfa;
-  --gold:     #f5c842;
-  --green:    #00d97e;
-  --red:      #ff4d6d;
-  --text:     #e8eaf6;
-  --muted:    #6b7399;
-  --border:   rgba(255,255,255,0.07);
-  --glow:     0 0 40px rgba(0,229,255,0.15);
+  --bg:#060810; --bg2:#0b0f1c; --bg3:#111629;
+  --accent:#00e5ff; --accent2:#7b5cfa; --gold:#f5c842;
+  --green:#00d97e; --red:#ff4d6d;
+  --text:#e8eaf6; --muted:#6b7399; --border:rgba(255,255,255,0.07);
 }
 *{box-sizing:border-box;margin:0;padding:0;}
 html{scroll-behavior:smooth;}
-body{
-  font-family:'DM Sans',sans-serif;
-  background:var(--bg);
-  color:var(--text);
-  overflow-x:hidden;
-  cursor:none;
-}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden;cursor:none;}
 
 /* Custom cursor */
-.cursor{position:fixed;width:10px;height:10px;background:var(--accent);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:transform 0.1s,opacity 0.2s;mix-blend-mode:screen;}
+.cursor{position:fixed;width:10px;height:10px;background:var(--accent);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);mix-blend-mode:screen;}
 .cursor-ring{position:fixed;width:36px;height:36px;border:1.5px solid rgba(0,229,255,0.5);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:all 0.15s ease;mix-blend-mode:screen;}
 
-/* Noise overlay */
-body::before{
-  content:'';position:fixed;inset:0;
-  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
-  opacity:0.4;pointer-events:none;z-index:1;
-}
+/* Noise */
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");opacity:0.4;pointer-events:none;z-index:1;}
 
-/* ─── NAV ─────────────────────────────────────────── */
-nav{
-  position:fixed;top:0;left:0;right:0;z-index:100;
-  display:flex;align-items:center;justify-content:space-between;
-  padding:18px 48px;
-  background:rgba(6,8,16,0.7);
-  backdrop-filter:blur(20px);
-  border-bottom:1px solid var(--border);
-  transition:padding 0.3s;
-}
-.logo{
-  display:flex;align-items:center;gap:12px;
-  font-family:'Syne',sans-serif;font-size:22px;font-weight:800;
-  color:#fff;text-decoration:none;letter-spacing:-0.5px;
-}
-.logo-mark{
-  width:36px;height:36px;border-radius:10px;
-  background:linear-gradient(135deg,var(--accent),var(--accent2));
-  display:flex;align-items:center;justify-content:center;
-  font-size:16px;font-weight:900;color:#000;
-  box-shadow:0 0 20px rgba(0,229,255,0.3);
-  flex-shrink:0;
-}
-.nav-links{display:flex;gap:32px;align-items:center;}
-.nav-links a{
-  color:var(--muted);font-size:14px;font-weight:500;text-decoration:none;
-  transition:color 0.2s;letter-spacing:0.3px;
-}
+/* ─── NAV ─── */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:16px 48px;background:rgba(6,8,16,0.85);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);transition:padding 0.3s;}
+.logo{display:flex;align-items:center;gap:12px;font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:#fff;text-decoration:none;letter-spacing:-0.5px;}
+.logo-mark{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:900;color:#000;box-shadow:0 0 20px rgba(0,229,255,0.3);flex-shrink:0;}
+.nav-links{display:flex;gap:28px;align-items:center;}
+.nav-links a{color:var(--muted);font-size:13px;font-weight:500;text-decoration:none;transition:color 0.2s;cursor:none;}
 .nav-links a:hover{color:var(--text);}
-.nav-right{display:flex;align-items:center;gap:12px;}
-.btn-outline{
-  padding:8px 20px;border-radius:8px;
-  border:1px solid var(--border);background:transparent;
-  color:var(--text);font-size:13px;font-family:'DM Sans',sans-serif;
-  font-weight:500;cursor:none;transition:all 0.2s;
-}
+.nav-right{display:flex;align-items:center;gap:10px;}
+
+/* Language toggle */
+.lang-toggle{display:flex;align-items:center;gap:0;border:1px solid var(--border);border-radius:8px;overflow:hidden;background:rgba(255,255,255,0.03);}
+.lang-btn{padding:7px 14px;font-size:12px;font-weight:700;font-family:'Syne',sans-serif;letter-spacing:0.5px;border:none;background:transparent;color:var(--muted);cursor:none;transition:all 0.2s;}
+.lang-btn.active{background:var(--accent);color:#000;}
+.lang-divider{width:1px;height:20px;background:var(--border);}
+
+.btn-outline{padding:8px 18px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--text);font-size:13px;font-family:'DM Sans',sans-serif;font-weight:500;cursor:none;transition:all 0.2s;}
 .btn-outline:hover{border-color:var(--accent);color:var(--accent);}
-.btn-connect{
-  padding:9px 22px;border-radius:8px;border:none;
-  background:linear-gradient(135deg,var(--accent),#0096aa);
-  color:#000;font-size:13px;font-family:'Syne',sans-serif;
-  font-weight:700;cursor:none;transition:all 0.2s;
-  box-shadow:0 0 20px rgba(0,229,255,0.2);
-  display:flex;align-items:center;gap:7px;
-}
+.btn-connect{padding:9px 20px;border-radius:8px;border:none;background:linear-gradient(135deg,var(--accent),#0096aa);color:#000;font-size:13px;font-family:'Syne',sans-serif;font-weight:700;cursor:none;transition:all 0.2s;box-shadow:0 0 20px rgba(0,229,255,0.2);display:flex;align-items:center;gap:7px;}
 .btn-connect:hover{transform:translateY(-1px);box-shadow:0 4px 24px rgba(0,229,255,0.35);}
 
-/* ─── HERO ────────────────────────────────────────── */
-#hero{
-  min-height:100vh;
-  display:flex;align-items:center;justify-content:center;
-  text-align:center;
-  position:relative;
+/* ═══════════════════════════════════════════════════════════
+   ██████╗ █████╗     ██████╗  █████╗ ███╗   ██╗███╗   ██╗███████╗██████╗
+  ██╔════╝██╔══██╗    ██╔══██╗██╔══██╗████╗  ██║████╗  ██║██╔════╝██╔══██╗
+  ██║     ███████║    ██████╔╝███████║██╔██╗ ██║██╔██╗ ██║█████╗  ██████╔╝
+  ██║     ██╔══██║    ██╔══██╗██╔══██║██║╚██╗██║██║╚██╗██║██╔══╝  ██╔══██╗
+  ╚██████╗██║  ██║    ██████╔╝██║  ██║██║ ╚████║██║ ╚████║███████╗██║  ██║
+   ╚═════╝╚═╝  ╚═╝    ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═══╝╚═╝  ╚═══╝╚══════╝╚═╝  ╚═╝
+   ═══════════════════════════════════════════════════════════
+   ▼▼▼  合约地址 CA BANNER — 导航栏正下方  ▼▼▼
+   ▼▼▼  CONTRACT ADDRESS — DIRECTLY BELOW NAV BAR  ▼▼▼
+   ═══════════════════════════════════════════════════════════ */
+#ca-banner{
+  position:fixed;
+  top:69px; /* directly below navbar */
+  left:0;right:0;z-index:99;
+  background:linear-gradient(90deg,rgba(6,8,16,0.96),rgba(11,15,28,0.98),rgba(6,8,16,0.96));
+  border-bottom:1px solid rgba(0,229,255,0.2);
+  backdrop-filter:blur(16px);
+  padding:0;
   overflow:hidden;
-  padding:120px 24px 80px;
 }
-.hero-bg{
-  position:absolute;inset:0;
-  background:radial-gradient(ellipse 80% 60% at 50% 40%,rgba(0,229,255,0.06) 0%,transparent 70%),
-             radial-gradient(ellipse 60% 40% at 80% 80%,rgba(123,92,250,0.06) 0%,transparent 70%);
+.ca-banner-inner{
+  max-width:1200px;margin:0 auto;
+  display:flex;align-items:center;gap:0;
+  padding:10px 48px;
 }
-.hero-grid{
-  position:absolute;inset:0;
-  background-image:
-    linear-gradient(rgba(255,255,255,0.025) 1px,transparent 1px),
-    linear-gradient(90deg,rgba(255,255,255,0.025) 1px,transparent 1px);
-  background-size:60px 60px;
-  mask-image:radial-gradient(ellipse 80% 60% at 50% 40%,black 0%,transparent 70%);
+.ca-banner-label{
+  display:flex;align-items:center;gap:8px;
+  font-family:'Syne',sans-serif;font-size:11px;font-weight:800;
+  letter-spacing:1.5px;text-transform:uppercase;color:var(--accent);
+  white-space:nowrap;flex-shrink:0;
+  padding-right:20px;border-right:1px solid rgba(0,229,255,0.2);
 }
-.hero-content{position:relative;z-index:2;max-width:800px;}
-.hero-badge{
-  display:inline-flex;align-items:center;gap:8px;
-  padding:6px 16px;border-radius:100px;
+.ca-banner-label .pulse-dot{width:7px;height:7px;border-radius:50%;background:var(--accent);animation:pulse 2s ease infinite;flex-shrink:0;}
+.ca-banner-address{
+  flex:1;
+  font-family:'Courier New',monospace;
+  font-size:13px;font-weight:600;color:#fff;
+  letter-spacing:0.8px;
+  padding:0 24px;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  /* Subtle glow on the text */
+  text-shadow:0 0 20px rgba(0,229,255,0.3);
+}
+.ca-badges{
+  display:flex;align-items:center;gap:8px;
+  padding-left:20px;border-left:1px solid rgba(0,229,255,0.15);
+  flex-shrink:0;
+}
+.ca-badge-item{
+  display:flex;align-items:center;gap:5px;
+  font-size:10px;font-weight:600;padding:3px 10px;border-radius:100px;
+  white-space:nowrap;
+}
+.badge-green{background:rgba(0,217,126,0.1);border:1px solid rgba(0,217,126,0.25);color:var(--green);}
+.badge-gold{background:rgba(245,200,66,0.1);border:1px solid rgba(245,200,66,0.25);color:var(--gold);}
+.badge-blue{background:rgba(0,229,255,0.1);border:1px solid rgba(0,229,255,0.25);color:var(--accent);}
+.ca-copy-btn{
+  margin-left:16px;
+  display:flex;align-items:center;gap:6px;
+  padding:7px 16px;border-radius:8px;
   border:1px solid rgba(0,229,255,0.3);
-  background:rgba(0,229,255,0.05);
-  font-size:12px;color:var(--accent);font-weight:600;letter-spacing:1px;
-  text-transform:uppercase;margin-bottom:28px;
-  animation:fadeUp 0.6s ease both;
+  background:rgba(0,229,255,0.08);
+  color:var(--accent);font-size:12px;font-family:'Syne',sans-serif;font-weight:700;
+  cursor:none;transition:all 0.2s;white-space:nowrap;flex-shrink:0;
 }
+.ca-copy-btn:hover{background:rgba(0,229,255,0.16);border-color:var(--accent);}
+/* ═══════════════════════════════════════════════════════════
+   ▲▲▲  CA BANNER 结束  END OF CA BANNER  ▲▲▲
+   ═══════════════════════════════════════════════════════════ */
+
+/* Scrolling ticker on CA banner */
+.ca-ticker-wrap{position:absolute;inset:0;pointer-events:none;overflow:hidden;opacity:0.06;}
+.ca-ticker{display:flex;gap:60px;animation:ticker 30s linear infinite;white-space:nowrap;padding:12px 0;font-family:'Syne',sans-serif;font-size:11px;font-weight:800;letter-spacing:2px;color:var(--accent);}
+@keyframes ticker{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+
+/* Push content below fixed nav + ca-banner */
+.page-top-offset{height:133px;}
+
+/* ─── HERO ─── */
+#hero{min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;position:relative;overflow:hidden;padding:140px 24px 80px;}
+.hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 40%,rgba(0,229,255,0.06) 0%,transparent 70%),radial-gradient(ellipse 60% 40% at 80% 80%,rgba(123,92,250,0.06) 0%,transparent 70%);}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,0.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.025) 1px,transparent 1px);background-size:60px 60px;mask-image:radial-gradient(ellipse 80% 60% at 50% 40%,black 0%,transparent 70%);}
+.hero-content{position:relative;z-index:2;max-width:800px;}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;padding:6px 16px;border-radius:100px;border:1px solid rgba(0,229,255,0.3);background:rgba(0,229,255,0.05);font-size:12px;color:var(--accent);font-weight:600;letter-spacing:1px;text-transform:uppercase;margin-bottom:28px;animation:fadeUp 0.6s ease both;}
 .hero-badge span{width:6px;height:6px;border-radius:50%;background:var(--accent);animation:pulse 2s ease infinite;}
 @keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:0.4;transform:scale(0.8);}}
-h1{
-  font-family:'Syne',sans-serif;font-size:clamp(42px,7vw,82px);
-  font-weight:800;line-height:1.05;letter-spacing:-2px;
-  margin-bottom:24px;
-  animation:fadeUp 0.6s 0.1s ease both;
-}
-h1 .accent{
-  background:linear-gradient(90deg,var(--accent),var(--accent2));
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
-}
-.hero-sub{
-  font-size:18px;color:var(--muted);line-height:1.7;
-  max-width:560px;margin:0 auto 40px;
-  animation:fadeUp 0.6s 0.2s ease both;
-}
-.hero-ctas{
-  display:flex;gap:14px;justify-content:center;flex-wrap:wrap;
-  animation:fadeUp 0.6s 0.3s ease both;
-}
-.btn-primary{
-  padding:14px 32px;border-radius:10px;border:none;
-  background:linear-gradient(135deg,var(--accent),var(--accent2));
-  color:#fff;font-size:15px;font-family:'Syne',sans-serif;font-weight:700;
-  cursor:none;transition:all 0.2s;
-  box-shadow:0 4px 30px rgba(0,229,255,0.25);
-}
+h1{font-family:'Syne',sans-serif;font-size:clamp(42px,7vw,82px);font-weight:800;line-height:1.05;letter-spacing:-2px;margin-bottom:24px;animation:fadeUp 0.6s 0.1s ease both;}
+h1 .accent{background:linear-gradient(90deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.hero-sub{font-size:18px;color:var(--muted);line-height:1.7;max-width:560px;margin:0 auto 40px;animation:fadeUp 0.6s 0.2s ease both;}
+.hero-ctas{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;animation:fadeUp 0.6s 0.3s ease both;}
+.btn-primary{padding:14px 32px;border-radius:10px;border:none;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;font-size:15px;font-family:'Syne',sans-serif;font-weight:700;cursor:none;transition:all 0.2s;box-shadow:0 4px 30px rgba(0,229,255,0.25);}
 .btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 40px rgba(0,229,255,0.4);}
-.btn-secondary{
-  padding:14px 32px;border-radius:10px;
-  border:1px solid var(--border);background:rgba(255,255,255,0.04);
-  color:var(--text);font-size:15px;font-family:'DM Sans',sans-serif;font-weight:500;
-  cursor:none;transition:all 0.2s;
-}
+.btn-secondary{padding:14px 32px;border-radius:10px;border:1px solid var(--border);background:rgba(255,255,255,0.04);color:var(--text);font-size:15px;font-family:'DM Sans',sans-serif;font-weight:500;cursor:none;transition:all 0.2s;}
 .btn-secondary:hover{border-color:rgba(255,255,255,0.2);background:rgba(255,255,255,0.07);}
-
-/* stats bar */
-.stats-bar{
-  display:flex;gap:0;margin-top:72px;
-  border:1px solid var(--border);border-radius:16px;
-  background:rgba(11,15,28,0.8);overflow:hidden;
-  animation:fadeUp 0.6s 0.4s ease both;
-}
-.stat-item{
-  flex:1;padding:20px 28px;text-align:center;
-  border-right:1px solid var(--border);
-}
+.stats-bar{display:flex;gap:0;margin-top:72px;border:1px solid var(--border);border-radius:16px;background:rgba(11,15,28,0.8);overflow:hidden;animation:fadeUp 0.6s 0.4s ease both;}
+.stat-item{flex:1;padding:20px 28px;text-align:center;border-right:1px solid var(--border);}
 .stat-item:last-child{border-right:none;}
 .stat-val{font-family:'Syne',sans-serif;font-size:26px;font-weight:800;color:#fff;margin-bottom:4px;}
 .stat-val .unit{font-size:14px;color:var(--muted);font-weight:400;}
 .stat-lbl{font-size:12px;color:var(--muted);letter-spacing:0.5px;text-transform:uppercase;}
 @keyframes fadeUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
 
-/* ─── SECTION COMMON ─────────────────────────────── */
+/* ─── SECTIONS ─── */
 section{padding:100px 48px;position:relative;z-index:2;}
-.section-label{
-  font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;
-  color:var(--accent);margin-bottom:16px;
-}
-.section-title{
-  font-family:'Syne',sans-serif;font-size:clamp(28px,4vw,48px);
-  font-weight:800;line-height:1.1;letter-spacing:-1px;margin-bottom:16px;
-}
+.section-label{font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--accent);margin-bottom:16px;}
+.section-title{font-family:'Syne',sans-serif;font-size:clamp(28px,4vw,48px);font-weight:800;line-height:1.1;letter-spacing:-1px;margin-bottom:16px;}
 .section-sub{font-size:16px;color:var(--muted);line-height:1.7;max-width:580px;}
 .container{max-width:1200px;margin:0 auto;}
 
-/* ─── PAIN POINTS ────────────────────────────────── */
+/* ─── PAIN ─── */
 #pain{background:linear-gradient(180deg,var(--bg) 0%,var(--bg2) 100%);}
-.pain-grid{
-  display:grid;grid-template-columns:1fr 1fr;gap:32px;margin-top:60px;
-  align-items:start;
-}
-.pain-left{}
-.ca-box{
-  margin-top:40px;
-  padding:28px;border-radius:16px;
-  border:1px solid rgba(0,229,255,0.25);
-  background:rgba(0,229,255,0.04);
-  position:relative;overflow:hidden;
-}
-.ca-box::before{
-  content:'';position:absolute;top:-1px;left:20px;right:20px;height:1px;
-  background:linear-gradient(90deg,transparent,var(--accent),transparent);
-}
-.ca-label{font-size:11px;font-weight:700;letter-spacing:2px;color:var(--accent);text-transform:uppercase;margin-bottom:12px;}
-.ca-address{
-  font-family:'DM Mono',monospace,sans-serif;
-  font-size:13px;color:#fff;word-break:break-all;line-height:1.6;
-  background:rgba(0,0,0,0.3);border-radius:8px;padding:14px 16px;
-  border:1px solid var(--border);letter-spacing:0.5px;
-}
-.ca-meta{
-  display:flex;gap:20px;margin-top:16px;flex-wrap:wrap;
-}
-.ca-tag{
-  display:flex;align-items:center;gap:6px;
-  font-size:12px;color:var(--muted);
-}
-.ca-tag .dot{width:6px;height:6px;border-radius:50%;}
-.dot-green{background:var(--green);}
-.dot-gold{background:var(--gold);}
-.dot-blue{background:var(--accent);}
-.copy-btn{
-  margin-top:14px;
-  display:flex;align-items:center;gap:7px;
-  padding:8px 16px;border-radius:8px;
-  border:1px solid var(--border);background:transparent;
-  color:var(--muted);font-size:12px;font-family:'DM Sans',sans-serif;
-  cursor:none;transition:all 0.2s;
-}
-.copy-btn:hover{border-color:var(--accent);color:var(--accent);}
-
-.pain-right{
-  display:flex;flex-direction:column;gap:16px;
-}
-.pain-card{
-  padding:24px;border-radius:14px;
-  border:1px solid var(--border);
-  background:var(--bg3);
-  display:flex;gap:18px;
-  transition:border-color 0.2s,transform 0.2s;
-  position:relative;overflow:hidden;
-}
-.pain-card::before{
-  content:'';position:absolute;inset:0;
-  background:linear-gradient(135deg,rgba(255,77,109,0.04) 0%,transparent 60%);
-  pointer-events:none;
-}
+.pain-grid{display:grid;grid-template-columns:1fr 1fr;gap:32px;margin-top:60px;align-items:start;}
+.pain-card{padding:24px;border-radius:14px;border:1px solid var(--border);background:var(--bg3);display:flex;gap:18px;transition:border-color 0.2s,transform 0.2s;position:relative;overflow:hidden;}
+.pain-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,77,109,0.04) 0%,transparent 60%);pointer-events:none;}
 .pain-card:hover{border-color:rgba(255,77,109,0.3);transform:translateX(4px);}
-.pain-icon{
-  width:44px;height:44px;border-radius:10px;
-  background:rgba(255,77,109,0.1);border:1px solid rgba(255,77,109,0.2);
-  display:flex;align-items:center;justify-content:center;
-  font-size:20px;flex-shrink:0;
-}
+.pain-icon{width:44px;height:44px;border-radius:10px;background:rgba(255,77,109,0.1);border:1px solid rgba(255,77,109,0.2);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
 .pain-card h4{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;margin-bottom:6px;color:#fff;}
 .pain-card p{font-size:13px;color:var(--muted);line-height:1.6;}
-.solution-tag{
-  display:inline-flex;align-items:center;gap:5px;
-  margin-top:10px;padding:4px 10px;border-radius:100px;
-  background:rgba(0,217,126,0.1);border:1px solid rgba(0,217,126,0.2);
-  font-size:11px;color:var(--green);font-weight:600;
-}
+.solution-tag{display:inline-flex;align-items:center;gap:5px;margin-top:10px;padding:4px 10px;border-radius:100px;background:rgba(0,217,126,0.1);border:1px solid rgba(0,217,126,0.2);font-size:11px;color:var(--green);font-weight:600;}
 
-/* ─── HOW IT WORKS ───────────────────────────────── */
+/* ─── HOW ─── */
 #how{background:var(--bg2);}
-.steps{
-  display:grid;grid-template-columns:repeat(4,1fr);gap:24px;margin-top:60px;
-}
-.step{
-  padding:28px 24px;border-radius:16px;
-  border:1px solid var(--border);background:var(--bg3);
-  position:relative;
-}
-.step-num{
-  font-family:'Syne',sans-serif;font-size:48px;font-weight:800;
-  color:rgba(255,255,255,0.04);position:absolute;top:16px;right:20px;line-height:1;
-}
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;margin-top:60px;}
+.step{padding:28px 24px;border-radius:16px;border:1px solid var(--border);background:var(--bg3);position:relative;}
+.step-num{font-family:'Syne',sans-serif;font-size:48px;font-weight:800;color:rgba(255,255,255,0.04);position:absolute;top:16px;right:20px;line-height:1;}
 .step-icon{font-size:28px;margin-bottom:16px;}
 .step h4{font-family:'Syne',sans-serif;font-size:16px;font-weight:700;margin-bottom:8px;}
 .step p{font-size:13px;color:var(--muted);line-height:1.6;}
-.step-connector{
-  position:absolute;top:50%;right:-24px;
-  width:24px;height:1px;background:var(--border);z-index:1;
-}
+.step-connector{position:absolute;top:50%;right:-24px;width:24px;height:1px;background:var(--border);z-index:1;}
 
-/* ─── TOKENOMICS ─────────────────────────────────── */
+/* ─── TOKENOMICS ─── */
 #tokenomics{background:var(--bg);}
 .toko-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px;margin-top:60px;align-items:center;}
 .toko-chart{position:relative;width:280px;height:280px;margin:0 auto;}
 .toko-donut{transform:rotate(-90deg);}
-.toko-center{
-  position:absolute;inset:0;display:flex;flex-direction:column;
-  align-items:center;justify-content:center;
-}
+.toko-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;}
 .toko-center-val{font-family:'Syne',sans-serif;font-size:28px;font-weight:800;}
 .toko-center-lbl{font-size:12px;color:var(--muted);}
 .toko-list{display:flex;flex-direction:column;gap:14px;}
-.toko-item{
-  display:flex;align-items:center;justify-content:space-between;
-  padding:16px 20px;border-radius:12px;
-  border:1px solid var(--border);background:var(--bg3);
-}
+.toko-item{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-radius:12px;border:1px solid var(--border);background:var(--bg3);}
 .toko-item-left{display:flex;align-items:center;gap:12px;}
 .toko-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
 .toko-name{font-size:14px;font-weight:500;}
 .toko-pct{font-family:'Syne',sans-serif;font-size:18px;font-weight:700;color:#fff;}
 .toko-sub{font-size:11px;color:var(--muted);}
-.tax-box{
-  margin-top:40px;padding:24px;border-radius:14px;
-  background:linear-gradient(135deg,rgba(0,229,255,0.05),rgba(123,92,250,0.05));
-  border:1px solid rgba(0,229,255,0.15);
-}
+.tax-box{margin-top:40px;padding:24px;border-radius:14px;background:linear-gradient(135deg,rgba(0,229,255,0.05),rgba(123,92,250,0.05));border:1px solid rgba(0,229,255,0.15);}
 .tax-title{font-family:'Syne',sans-serif;font-size:16px;font-weight:700;margin-bottom:16px;}
 .tax-row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border);}
 .tax-row:last-child{border-bottom:none;}
 .tax-key{font-size:13px;color:var(--muted);}
 .tax-val{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;color:var(--accent);}
 
-/* ─── STAKING APP ─────────────────────────────────── */
+/* ─── APP ─── */
 #app{background:var(--bg2);}
 .app-grid{display:grid;grid-template-columns:1fr 1fr;gap:32px;margin-top:60px;}
-.app-card{
-  padding:28px;border-radius:20px;
-  border:1px solid var(--border);background:var(--bg3);
-}
+.app-card{padding:28px;border-radius:20px;border:1px solid var(--border);background:var(--bg3);}
 .app-card h3{font-family:'Syne',sans-serif;font-size:18px;font-weight:700;margin-bottom:6px;}
-.app-card .apy{
-  font-family:'Syne',sans-serif;font-size:36px;font-weight:800;
-  color:var(--green);margin:16px 0 4px;
-}
+.app-card .apy{font-family:'Syne',sans-serif;font-size:36px;font-weight:800;color:var(--green);margin:16px 0 4px;}
 .app-card .apy-lbl{font-size:12px;color:var(--muted);margin-bottom:20px;}
 .input-row{margin-bottom:16px;}
 .input-lbl{font-size:12px;color:var(--muted);margin-bottom:8px;display:flex;justify-content:space-between;}
 .input-lbl span{color:var(--accent);cursor:none;}
-.token-input{
-  width:100%;padding:14px 16px;border-radius:10px;
-  border:1px solid var(--border);background:rgba(0,0,0,0.3);
-  color:#fff;font-size:16px;font-family:'Syne',sans-serif;
-  outline:none;transition:border-color 0.2s;
-}
+.token-input{width:100%;padding:14px 16px;border-radius:10px;border:1px solid var(--border);background:rgba(0,0,0,0.3);color:#fff;font-size:16px;font-family:'Syne',sans-serif;outline:none;transition:border-color 0.2s;}
 .token-input:focus{border-color:var(--accent);}
 .token-input::placeholder{color:var(--muted);}
-.btn-stake{
-  width:100%;padding:14px;border-radius:10px;border:none;
-  background:linear-gradient(135deg,var(--accent),var(--accent2));
-  color:#fff;font-size:15px;font-family:'Syne',sans-serif;font-weight:700;
-  cursor:none;transition:all 0.2s;margin-top:8px;
-}
+.btn-stake{width:100%;padding:14px;border-radius:10px;border:none;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;font-size:15px;font-family:'Syne',sans-serif;font-weight:700;cursor:none;transition:all 0.2s;margin-top:8px;}
 .btn-stake:hover{transform:translateY(-1px);box-shadow:0 6px 30px rgba(0,229,255,0.3);}
 .btn-stake:disabled{opacity:0.5;transform:none;box-shadow:none;}
-.reward-box{
-  padding:16px;border-radius:10px;
-  background:rgba(0,0,0,0.3);border:1px solid var(--border);
-  margin-bottom:16px;
-}
+.reward-box{padding:16px;border-radius:10px;background:rgba(0,0,0,0.3);border:1px solid var(--border);margin-bottom:16px;}
 .reward-row{display:flex;justify-content:space-between;margin-bottom:6px;}
 .reward-row:last-child{margin-bottom:0;}
 .reward-key{font-size:13px;color:var(--muted);}
 .reward-val{font-size:13px;font-weight:600;color:#fff;}
 .reward-val.green{color:var(--green);}
 
-/* ─── ROADMAP ────────────────────────────────────── */
+/* ─── ROADMAP ─── */
 #roadmap{background:var(--bg);}
-.roadmap-timeline{
-  position:relative;margin-top:60px;
-  display:grid;grid-template-columns:repeat(4,1fr);gap:24px;
-}
-.roadmap-timeline::before{
-  content:'';position:absolute;top:32px;left:5%;right:5%;height:1px;
-  background:linear-gradient(90deg,transparent,var(--border),var(--border),var(--border),transparent);
-  z-index:0;
-}
+.roadmap-timeline{position:relative;margin-top:60px;display:grid;grid-template-columns:repeat(4,1fr);gap:24px;}
+.roadmap-timeline::before{content:'';position:absolute;top:32px;left:5%;right:5%;height:1px;background:linear-gradient(90deg,transparent,var(--border),var(--border),var(--border),transparent);z-index:0;}
 .road-item{position:relative;z-index:1;}
-.road-dot{
-  width:16px;height:16px;border-radius:50%;
-  border:2px solid var(--accent);background:var(--bg);
-  margin:0 auto 24px;
-  position:relative;
-}
+.road-dot{width:16px;height:16px;border-radius:50%;border:2px solid var(--accent);background:var(--bg);margin:0 auto 24px;position:relative;}
 .road-dot.done{background:var(--accent);}
-.road-dot.done::after{
-  content:'';position:absolute;inset:-6px;border-radius:50%;
-  background:rgba(0,229,255,0.15);
-  animation:pulse 2s ease infinite;
-}
+.road-dot.done::after{content:'';position:absolute;inset:-6px;border-radius:50%;background:rgba(0,229,255,0.15);animation:pulse 2s ease infinite;}
 .road-quarter{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--accent);margin-bottom:10px;text-align:center;}
-.road-card{
-  padding:20px;border-radius:14px;
-  border:1px solid var(--border);background:var(--bg3);
-}
+.road-card{padding:20px;border-radius:14px;border:1px solid var(--border);background:var(--bg3);}
 .road-card h4{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;margin-bottom:10px;}
 .road-card ul{list-style:none;padding:0;}
-.road-card ul li{
-  font-size:12px;color:var(--muted);padding:4px 0;
-  display:flex;align-items:center;gap:8px;
-}
+.road-card ul li{font-size:12px;color:var(--muted);padding:4px 0;display:flex;align-items:center;gap:8px;}
 .road-card ul li::before{content:'→';color:var(--accent);font-size:10px;}
 .road-card ul li.done-item{color:var(--green);}
 .road-card ul li.done-item::before{content:'✓';color:var(--green);}
 
-/* ─── SOCIALS / TWEETS ───────────────────────────── */
+/* ─── COMMUNITY ─── */
 #community{background:var(--bg2);}
-.tweet-grid{
-  display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:60px;
-}
-.tweet-card{
-  padding:22px;border-radius:16px;
-  border:1px solid var(--border);background:var(--bg3);
-  transition:border-color 0.2s,transform 0.2s;
-}
+.tweet-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:60px;}
+.tweet-card{padding:22px;border-radius:16px;border:1px solid var(--border);background:var(--bg3);transition:border-color 0.2s,transform 0.2s;}
 .tweet-card:hover{border-color:rgba(0,229,255,0.2);transform:translateY(-3px);}
 .tweet-header{display:flex;align-items:center;gap:12px;margin-bottom:14px;}
-.tweet-avatar{
-  width:38px;height:38px;border-radius:50%;
-  background:linear-gradient(135deg,var(--accent),var(--accent2));
-  display:flex;align-items:center;justify-content:center;
-  font-weight:800;font-size:14px;color:#000;flex-shrink:0;
-}
+.tweet-avatar{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;color:#000;flex-shrink:0;}
 .tweet-name{font-size:14px;font-weight:600;color:#fff;}
 .tweet-handle{font-size:12px;color:var(--muted);}
 .tweet-body{font-size:13px;color:var(--text);line-height:1.65;}
 .tweet-body .tag{color:var(--accent);}
-.tweet-footer{
-  margin-top:14px;display:flex;gap:20px;
-}
+.tweet-footer{margin-top:14px;display:flex;gap:20px;}
 .tweet-action{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--muted);}
-.tweet-x{
-  width:16px;height:16px;
-  fill:var(--muted);
-}
 
-/* ─── FOOTER ─────────────────────────────────────── */
-footer{
-  background:var(--bg);border-top:1px solid var(--border);
-  padding:60px 48px 32px;
-}
-.footer-grid{
-  display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px;
-  max-width:1200px;margin:0 auto 48px;
-}
+/* ─── FOOTER ─── */
+footer{background:var(--bg);border-top:1px solid var(--border);padding:60px 48px 32px;}
+.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px;max-width:1200px;margin:0 auto 48px;}
 .footer-brand p{font-size:14px;color:var(--muted);line-height:1.7;margin-top:12px;max-width:280px;}
 .footer-col h5{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:16px;}
 .footer-col a{display:block;font-size:14px;color:var(--muted);text-decoration:none;margin-bottom:10px;transition:color 0.2s;cursor:none;}
 .footer-col a:hover{color:var(--text);}
-.footer-bottom{
-  max-width:1200px;margin:0 auto;
-  display:flex;justify-content:space-between;align-items:center;
-  border-top:1px solid var(--border);padding-top:24px;
-  font-size:13px;color:var(--muted);
-}
+.footer-bottom{max-width:1200px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--border);padding-top:24px;font-size:13px;color:var(--muted);}
 
-/* ─── WALLET MODAL ───────────────────────────────── */
-.modal-overlay{
-  position:fixed;inset:0;background:rgba(0,0,0,0.7);
-  backdrop-filter:blur(8px);z-index:200;
-  display:none;align-items:center;justify-content:center;
-}
+/* ─── WALLET MODAL ─── */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);backdrop-filter:blur(8px);z-index:200;display:none;align-items:center;justify-content:center;}
 .modal-overlay.active{display:flex;}
-.wallet-modal{
-  background:var(--bg2);border:1px solid rgba(255,255,255,0.1);
-  border-radius:24px;width:400px;padding:32px 28px 24px;
-  box-shadow:0 32px 80px rgba(0,0,0,0.8);
-  animation:modalIn 0.25s ease both;
-}
-@keyframes modalIn{from{opacity:0;transform:scale(0.95)translateY(10px);}to{opacity:1;transform:scale(1)translateY(0);}}
+.wallet-modal{background:var(--bg2);border:1px solid rgba(255,255,255,0.1);border-radius:24px;width:400px;padding:32px 28px 24px;box-shadow:0 32px 80px rgba(0,0,0,0.8);animation:modalIn 0.25s ease both;}
+@keyframes modalIn{from{opacity:0;transform:scale(0.95);}to{opacity:1;transform:scale(1);}}
 .modal-head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:24px;}
 .modal-title{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;}
 .modal-sub{font-size:13px;color:var(--muted);margin-top:4px;}
-.modal-close{
-  width:30px;height:30px;border-radius:50%;border:none;
-  background:rgba(255,255,255,0.07);color:var(--muted);
-  font-size:16px;cursor:none;
-  display:flex;align-items:center;justify-content:center;
-  transition:background 0.15s;
-}
+.modal-close{width:30px;height:30px;border-radius:50%;border:none;background:rgba(255,255,255,0.07);color:var(--muted);font-size:16px;cursor:none;display:flex;align-items:center;justify-content:center;transition:background 0.15s;}
 .modal-close:hover{background:rgba(255,255,255,0.14);color:#fff;}
 .wallet-list{display:flex;flex-direction:column;gap:10px;margin-bottom:20px;}
-.wallet-option{
-  display:flex;align-items:center;gap:14px;
-  padding:16px;border-radius:14px;
-  border:1px solid var(--border);background:rgba(255,255,255,0.03);
-  cursor:none;transition:all 0.15s;
-}
+.wallet-option{display:flex;align-items:center;gap:14px;padding:16px;border-radius:14px;border:1px solid var(--border);background:rgba(255,255,255,0.03);cursor:none;transition:all 0.15s;}
 .wallet-option:hover{border-color:rgba(0,229,255,0.25);background:rgba(0,229,255,0.04);}
 .wallet-option.connecting{border-color:rgba(0,229,255,0.5);}
 .w-icon{width:44px;height:44px;border-radius:12px;flex-shrink:0;display:flex;align-items:center;justify-content:center;overflow:hidden;}
@@ -496,65 +282,28 @@ footer{
 .w-tag-green{background:rgba(0,217,126,0.12);color:var(--green);}
 .w-tag-blue{background:rgba(0,229,255,0.12);color:var(--accent);}
 .w-arrow{color:var(--muted);font-size:18px;}
-.w-spinner{
-  width:22px;height:22px;border-radius:50%;
-  border:2px solid rgba(0,229,255,0.2);border-top-color:var(--accent);
-  animation:spin 0.8s linear infinite;
-}
+.w-spinner{width:22px;height:22px;border-radius:50%;border:2px solid rgba(0,229,255,0.2);border-top-color:var(--accent);animation:spin 0.8s linear infinite;}
 @keyframes spin{to{transform:rotate(360deg);}}
-.modal-footer-note{
-  text-align:center;font-size:12px;color:var(--muted);
-  display:flex;align-items:center;justify-content:center;gap:6px;
-}
+.modal-footer-note{text-align:center;font-size:12px;color:var(--muted);display:flex;align-items:center;justify-content:center;gap:6px;}
 
-/* ─── ADDRESS DROPDOWN ───────────────────────────── */
+/* ─── ADDRESS DROPDOWN ─── */
 .addr-wrap{position:relative;}
-.addr-btn{
-  display:flex;align-items:center;gap:8px;
-  padding:9px 16px;border-radius:8px;
-  border:1px solid rgba(0,229,255,0.3);
-  background:rgba(0,229,255,0.07);
-  color:var(--accent);font-size:13px;font-family:'Syne',sans-serif;font-weight:600;
-  cursor:none;transition:all 0.15s;
-}
+.addr-btn{display:flex;align-items:center;gap:8px;padding:9px 16px;border-radius:8px;border:1px solid rgba(0,229,255,0.3);background:rgba(0,229,255,0.07);color:var(--accent);font-size:13px;font-family:'Syne',sans-serif;font-weight:600;cursor:none;transition:all 0.15s;}
 .addr-btn:hover{background:rgba(0,229,255,0.12);}
 .addr-dot{width:7px;height:7px;border-radius:50%;background:var(--green);}
-.addr-dropdown{
-  position:absolute;top:calc(100% + 8px);right:0;
-  background:var(--bg2);border:1px solid rgba(255,255,255,0.1);
-  border-radius:14px;padding:6px;min-width:190px;
-  box-shadow:0 12px 40px rgba(0,0,0,0.6);
-  opacity:0;pointer-events:none;transform:translateY(-4px);
-  transition:all 0.15s;z-index:50;
-}
+.addr-dropdown{position:absolute;top:calc(100% + 8px);right:0;background:var(--bg2);border:1px solid rgba(255,255,255,0.1);border-radius:14px;padding:6px;min-width:190px;box-shadow:0 12px 40px rgba(0,0,0,0.6);opacity:0;pointer-events:none;transform:translateY(-4px);transition:all 0.15s;z-index:50;}
 .addr-dropdown.open{opacity:1;pointer-events:all;transform:translateY(0);}
-.addr-item{
-  display:flex;align-items:center;gap:10px;
-  padding:10px 12px;border-radius:8px;
-  font-size:13px;color:var(--text);cursor:none;
-  transition:background 0.1s;
-}
+.addr-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:8px;font-size:13px;color:var(--text);cursor:none;transition:background 0.1s;}
 .addr-item:hover{background:rgba(255,255,255,0.06);}
 .addr-item.danger{color:var(--red);}
 .addr-divider{height:1px;background:var(--border);margin:4px 0;}
 
-/* ─── TOAST ──────────────────────────────────────── */
-.toast{
-  position:fixed;bottom:28px;left:50%;
-  transform:translateX(-50%) translateY(12px);
-  background:var(--bg2);border:1px solid var(--border);
-  border-radius:10px;padding:11px 20px;
-  font-size:13px;color:var(--text);
-  box-shadow:0 8px 32px rgba(0,0,0,0.5);
-  opacity:0;pointer-events:none;
-  transition:all 0.25s;z-index:999;white-space:nowrap;
-  display:flex;align-items:center;gap:8px;
-}
+/* ─── TOAST ─── */
+.toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(12px);background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:11px 20px;font-size:13px;color:var(--text);box-shadow:0 8px 32px rgba(0,0,0,0.5);opacity:0;pointer-events:none;transition:all 0.25s;z-index:999;white-space:nowrap;display:flex;align-items:center;gap:8px;}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
 .toast.success{border-color:rgba(0,217,126,0.3);}
 .toast.error{border-color:rgba(255,77,109,0.3);}
 
-/* ─── RESPONSIVE ─────────────────────────────────── */
 @media(max-width:900px){
   nav{padding:14px 20px;}
   .nav-links{display:none;}
@@ -566,30 +315,30 @@ footer{
   .stats-bar{flex-wrap:wrap;}
   .stat-item{border-right:none;border-bottom:1px solid var(--border);}
   .stat-item:last-child{border-bottom:none;}
+  .ca-banner-inner{padding:10px 20px;flex-wrap:wrap;gap:10px;}
+  .ca-badges{display:none;}
+  #ca-banner{top:62px;}
+  .page-top-offset{height:115px;}
 }
 </style>
 </head>
 <body>
 
-<!-- Cursor -->
 <div class="cursor" id="cursor"></div>
 <div class="cursor-ring" id="cursorRing"></div>
-
-<!-- Toast -->
 <div class="toast" id="toast"></div>
 
-<!-- Wallet Modal Overlay -->
+<!-- ─── WALLET MODAL ─── -->
 <div class="modal-overlay" id="walletModal">
   <div class="wallet-modal">
     <div class="modal-head">
       <div>
-        <div class="modal-title">Connect Wallet</div>
-        <div class="modal-sub">Select your preferred wallet</div>
+        <div class="modal-title" data-i18n="connectWallet">连接钱包</div>
+        <div class="modal-sub" data-i18n="selectWallet">选择您偏好的钱包</div>
       </div>
       <button class="modal-close" onclick="closeWalletModal()">✕</button>
     </div>
     <div class="wallet-list">
-      <!-- MetaMask -->
       <div class="wallet-option" id="w-metamask" onclick="connectWallet(this,'MetaMask')">
         <div class="w-icon" style="background:#fff1e0;">
           <svg width="30" height="28" viewBox="0 0 318.6 318.6">
@@ -605,12 +354,11 @@ footer{
           </svg>
         </div>
         <div class="w-info">
-          <div class="w-name">MetaMask <span class="w-tag w-tag-green" id="mm-installed">Installed</span></div>
-          <div class="w-desc">Most popular browser wallet</div>
+          <div class="w-name">MetaMask <span class="w-tag w-tag-green" id="mm-installed" data-i18n="installed">已安装</span></div>
+          <div class="w-desc" data-i18n="mmDesc">最流行的浏览器钱包</div>
         </div>
         <span class="w-arrow" id="mm-arrow">›</span>
       </div>
-      <!-- OKX -->
       <div class="wallet-option" id="w-okx" onclick="connectWallet(this,'OKX Wallet')">
         <div class="w-icon" style="background:#111;border:1px solid #222;">
           <svg width="24" height="24" viewBox="0 0 100 100" fill="none">
@@ -622,12 +370,11 @@ footer{
           </svg>
         </div>
         <div class="w-info">
-          <div class="w-name">OKX Wallet <span class="w-tag w-tag-green" id="okx-installed">Installed</span></div>
-          <div class="w-desc">OKX official Web3 wallet</div>
+          <div class="w-name">OKX Wallet <span class="w-tag w-tag-green" id="okx-installed" data-i18n="installed">已安装</span></div>
+          <div class="w-desc" data-i18n="okxDesc">OKX 官方 Web3 钱包</div>
         </div>
         <span class="w-arrow" id="okx-arrow">›</span>
       </div>
-      <!-- WalletConnect -->
       <div class="wallet-option" id="w-wc" onclick="showWCQR(this)">
         <div class="w-icon" style="background:#0d2240;">
           <svg width="26" height="18" viewBox="0 0 300 185" fill="none">
@@ -635,137 +382,172 @@ footer{
           </svg>
         </div>
         <div class="w-info">
-          <div class="w-name">WalletConnect <span class="w-tag w-tag-blue">Scan QR</span></div>
-          <div class="w-desc">Connect mobile wallet via QR</div>
+          <div class="w-name">WalletConnect <span class="w-tag w-tag-blue" data-i18n="wcScan">扫码连接</span></div>
+          <div class="w-desc" data-i18n="wcDesc">扫描二维码连接手机钱包</div>
         </div>
         <span class="w-arrow" id="wc-arrow">›</span>
       </div>
     </div>
     <div class="modal-footer-note">
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
-      </svg>
-      Signature only — no assets transferred
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+      <span data-i18n="sigNote">仅签名验证，不会转移任何资产</span>
     </div>
   </div>
 </div>
 
-<!-- ─── NAV ─────────────────────────────────────────── -->
+<!-- ─── NAV ─── -->
 <nav id="navbar">
   <a href="#" class="logo">
     <div class="logo-mark">NY</div>
     NexYield
   </a>
   <div class="nav-links">
-    <a href="#pain">Problem</a>
-    <a href="#how">How It Works</a>
-    <a href="#tokenomics">Tokenomics</a>
-    <a href="#app">Stake</a>
-    <a href="#roadmap">Roadmap</a>
-    <a href="#community">Community</a>
+    <a href="#pain" data-i18n="navProblem">痛点</a>
+    <a href="#how" data-i18n="navHow">运作机制</a>
+    <a href="#tokenomics" data-i18n="navToko">代币经济</a>
+    <a href="#app" data-i18n="navStake">质押</a>
+    <a href="#roadmap" data-i18n="navRoadmap">路线图</a>
+    <a href="#community" data-i18n="navCommunity">社区</a>
   </div>
   <div class="nav-right" id="navRight">
-    <button class="btn-outline" onclick="window.open('https://flap.sh','_blank')">Buy on Flap ↗</button>
-    <button class="btn-connect" onclick="openWalletModal()">
+    <!-- Language Toggle -->
+    <div class="lang-toggle">
+      <button class="lang-btn active" id="btnZH" onclick="setLang('zh')">中文</button>
+      <div class="lang-divider"></div>
+      <button class="lang-btn" id="btnEN" onclick="setLang('en')">EN</button>
+    </div>
+    <button class="btn-outline" onclick="window.open('https://flap.sh','_blank')" data-i18n="buyFlap">Flap 购买 ↗</button>
+    <button class="btn-connect" id="connectBtn" onclick="openWalletModal()">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
         <path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/><path d="M18 12a2 2 0 0 0 0 4h4v-4z"/>
       </svg>
-      Connect Wallet
+      <span data-i18n="connectWallet">连接钱包</span>
     </button>
   </div>
 </nav>
 
-<!-- ─── HERO ─────────────────────────────────────────── -->
+<!-- ═══════════════════════════════════════════════════════════════════
+  ██████╗ █████╗     ██████╗  █████╗ ███╗   ██╗███╗   ██╗███████╗██████╗
+ ██╔════╝██╔══██╗    ██╔══██╗██╔══██╗████╗  ██║████╗  ██║██╔════╝██╔══██╗
+ ██║     ███████║    ██████╔╝███████║██╔██╗ ██║██╔██╗ ██║█████╗  ██████╔╝
+ ██║     ██╔══██║    ██╔══██╗██╔══██║██║╚██╗██║██║╚██╗██║██╔══╝  ██╔══██╗
+ ╚██████╗██║  ██║    ██████╔╝██║  ██║██║ ╚████║██║ ╚████║███████╗██║  ██║
+  ╚═════╝╚═╝  ╚═╝    ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═══╝╚═╝  ╚═══╝╚══════╝╚═╝  ╚═╝
+
+  ▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼
+  ▼  合约地址横幅 — 固定在导航栏正下方，全站最显眼位置           ▼
+  ▼  CONTRACT ADDRESS BANNER — FIXED BELOW NAV, MOST PROMINENT  ▼
+  ▼  CA: 0x4E3a8F2c1B9d7A0e5C6bD84f1E2A3C7B9D0F5E8A            ▼
+  ▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼
+  ═══════════════════════════════════════════════════════════════════ -->
+<div id="ca-banner">
+  <!-- Subtle scrolling ticker background -->
+  <div class="ca-ticker-wrap">
+    <div class="ca-ticker">
+      CONTRACT ADDRESS · $NYD · 0x4E3a8F2c1B9d7A0e5C6bD84f1E2A3C7B9D0F5E8A · NEXYIELD · 1% TAX · AUDITED ·
+      CONTRACT ADDRESS · $NYD · 0x4E3a8F2c1B9d7A0e5C6bD84f1E2A3C7B9D0F5E8A · NEXYIELD · 1% TAX · AUDITED ·
+    </div>
+  </div>
+  <div class="ca-banner-inner">
+    <div class="ca-banner-label">
+      <span class="pulse-dot"></span>
+      <span data-i18n="caLabel">合约地址 CA</span>
+    </div>
+    <!-- ★★★ CA 合约地址 — 核心数据 ★★★ -->
+    <div class="ca-banner-address" id="caAddressDisplay">
+      0x4E3a8F2c1B9d7A0e5C6bD84f1E2A3C7B9D0F5E8A
+    </div>
+    <!-- ★★★ CA END ★★★ -->
+    <div class="ca-badges">
+      <span class="ca-badge-item badge-green">✓ <span data-i18n="verified">已验证</span></span>
+      <span class="ca-badge-item badge-gold">🔓 <span data-i18n="renounced">已放弃权限</span></span>
+      <span class="ca-badge-item badge-blue">🔒 <span data-i18n="lpLocked">LP 已锁定</span></span>
+    </div>
+    <button class="ca-copy-btn" onclick="copyCA()">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+      <span data-i18n="copyCa">复制地址</span>
+    </button>
+  </div>
+</div>
+<!-- ═══════════════════════════════════════════════════════════════════
+  ▲▲▲  CA 横幅结束  END CA BANNER  ▲▲▲
+  ═══════════════════════════════════════════════════════════════════ -->
+
+<div class="page-top-offset"></div>
+
+<!-- ─── HERO ─── -->
 <section id="hero">
   <div class="hero-bg"></div>
   <div class="hero-grid"></div>
   <div class="hero-content">
-    <div class="hero-badge"><span></span>Live on Flap · 1% Tax · Audited</div>
-    <h1>The <span class="accent">Yield Layer</span><br>for Every Wallet</h1>
-    <p class="hero-sub">NexYield is the first auto-compounding yield aggregator on Flap that gives retail investors access to institutional-grade DeFi strategies — with just 1% tax.</p>
+    <div class="hero-badge"><span></span><span data-i18n="heroBadge">Flap 链上线 · 税率仅 1% · 已审计</span></div>
+    <h1 data-i18n="heroTitle">每个钱包的<br><span class="accent">收益层</span></h1>
+    <p class="hero-sub" data-i18n="heroSub">NexYield 是 Flap 链上首个自动复投收益聚合协议——让散户也能享受机构级 DeFi 策略，税率仅 1%。</p>
     <div class="hero-ctas">
-      <button class="btn-primary" onclick="openWalletModal()">Launch App →</button>
-      <button class="btn-secondary" onclick="document.getElementById('pain').scrollIntoView({behavior:'smooth'})">Learn More</button>
+      <button class="btn-primary" onclick="openWalletModal()" data-i18n="launchApp">启动应用 →</button>
+      <button class="btn-secondary" onclick="document.getElementById('pain').scrollIntoView({behavior:'smooth'})" data-i18n="learnMore">了解更多</button>
     </div>
     <div class="stats-bar">
       <div class="stat-item">
         <div class="stat-val">$4.2<span class="unit">M</span></div>
-        <div class="stat-lbl">Total Value Locked</div>
+        <div class="stat-lbl" data-i18n="tvl">总锁仓量</div>
       </div>
       <div class="stat-item">
         <div class="stat-val">38.7<span class="unit">%</span></div>
-        <div class="stat-lbl">Average APY</div>
+        <div class="stat-lbl" data-i18n="avgApy">平均年化</div>
       </div>
       <div class="stat-item">
         <div class="stat-val">12,400<span class="unit">+</span></div>
-        <div class="stat-lbl">Active Stakers</div>
+        <div class="stat-lbl" data-i18n="stakers">活跃质押者</div>
       </div>
       <div class="stat-item">
         <div class="stat-val">1<span class="unit">%</span></div>
-        <div class="stat-lbl">Total Tax Rate</div>
+        <div class="stat-lbl" data-i18n="taxRate">总税率</div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ─── PAIN POINTS + CA ──────────────────────────────── -->
+<!-- ─── PAIN POINTS ─── -->
 <section id="pain">
   <div class="container">
     <div class="pain-grid">
-      <div class="pain-left">
-        <div class="section-label">The Problem</div>
-        <h2 class="section-title">Why Retail Loses.<br>Why We Built This.</h2>
-        <p class="section-sub">DeFi yields are real — but the infrastructure to capture them has always been built for whales, not everyday investors.</p>
-
-        <!-- CA BOX -->
-        <div class="ca-box">
-          <div class="ca-label">📋 Contract Address (CA)</div>
-          <div class="ca-address" id="caAddress">0x4E3a8F2c1B9d7A0e5C6bD84f1E2A3C7B9D0F5E8A</div>
-          <div class="ca-meta">
-            <div class="ca-tag"><span class="dot dot-green"></span>Verified on Explorer</div>
-            <div class="ca-tag"><span class="dot dot-gold"></span>Renounced Ownership</div>
-            <div class="ca-tag"><span class="dot dot-blue"></span>Liquidity Locked</div>
-          </div>
-          <button class="copy-btn" onclick="copyCA()">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
-            </svg>
-            Copy Contract Address
-          </button>
-        </div>
+      <div>
+        <div class="section-label" data-i18n="problemLabel">核心问题</div>
+        <h2 class="section-title" data-i18n="problemTitle">散户为何一直输。<br>我们为何而建。</h2>
+        <p class="section-sub" data-i18n="problemSub">DeFi 收益是真实存在的——但捕获它的基础设施，始终是为巨鲸而建，不是为普通投资者。</p>
       </div>
-
-      <div class="pain-right">
+      <div class="pain-right" style="display:flex;flex-direction:column;gap:16px;">
         <div class="pain-card">
           <div class="pain-icon">💸</div>
           <div>
-            <h4>Predatory Tax Structures</h4>
-            <p>Most DeFi tokens on Flap charge 5–15% tax. With NexYield's 1% flat rate, you keep what you earn. No hidden buy/sell asymmetry.</p>
-            <div class="solution-tag">✓ Fixed 1% tax — buy &amp; sell equal</div>
+            <h4 data-i18n="pain1Title">掠夺性税率结构</h4>
+            <p data-i18n="pain1Desc">Flap 上大多数 DeFi 代币税率高达 5–15%。NexYield 仅收 1% 固定税率，买卖对等，没有隐藏不对称。</p>
+            <div class="solution-tag" data-i18n="pain1Sol">✓ 固定 1% 税率 — 买卖相同</div>
           </div>
         </div>
         <div class="pain-card">
           <div class="pain-icon">⚙️</div>
           <div>
-            <h4>Manual Compounding = Missed Gains</h4>
-            <p>Manually harvesting and restaking rewards costs gas and time. Small wallets lose 20–40% of potential gains to compounding lag.</p>
-            <div class="solution-tag">✓ Auto-compound every 8 hours</div>
+            <h4 data-i18n="pain2Title">手动复投 = 损失收益</h4>
+            <p data-i18n="pain2Desc">手动收割并重新质押奖励需要消耗 Gas 和时间。小钱包因复投滞后损失 20–40% 的潜在收益。</p>
+            <div class="solution-tag" data-i18n="pain2Sol">✓ 每 8 小时自动复投</div>
           </div>
         </div>
         <div class="pain-card">
           <div class="pain-icon">🏦</div>
           <div>
-            <h4>Institutional Strategies Are Gated</h4>
-            <p>Yield optimization vaults with $100K minimums lock out retail. Diversified multi-protocol strategies remain inaccessible to most.</p>
-            <div class="solution-tag">✓ Minimum stake: 100 NYD tokens</div>
+            <h4 data-i18n="pain3Title">机构策略门槛过高</h4>
+            <p data-i18n="pain3Desc">收益优化金库设有 10 万美元起投门槛，普通人无缘参与多协议分散策略。</p>
+            <div class="solution-tag" data-i18n="pain3Sol">✓ 最低质押仅需 100 枚 NYD</div>
           </div>
         </div>
         <div class="pain-card">
           <div class="pain-icon">🎲</div>
           <div>
-            <h4>MEME Volatility Without Utility</h4>
-            <p>95% of Flap tokens have zero underlying utility. Price is pure speculation. NexYield generates real revenue distributed to stakers.</p>
-            <div class="solution-tag">✓ Revenue-backed token model</div>
+            <h4 data-i18n="pain4Title">MEME 波动无实用价值</h4>
+            <p data-i18n="pain4Desc">95% 的 Flap 代币毫无底层实用性，纯靠投机。NexYield 产生真实协议收入并分配给质押者。</p>
+            <div class="solution-tag" data-i18n="pain4Sol">✓ 收入支撑型代币模型</div>
           </div>
         </div>
       </div>
@@ -773,192 +555,108 @@ footer{
   </div>
 </section>
 
-<!-- ─── HOW IT WORKS ──────────────────────────────────── -->
+<!-- ─── HOW IT WORKS ─── -->
 <section id="how">
   <div class="container">
-    <div style="text-align:center;margin-bottom:0;">
-      <div class="section-label" style="text-align:center;">Protocol Mechanics</div>
-      <h2 class="section-title" style="text-align:center;margin:0 auto 16px;">How NexYield Works</h2>
-      <p class="section-sub" style="margin:0 auto;text-align:center;">Four steps to institutional-grade yield, democratized.</p>
+    <div style="text-align:center;">
+      <div class="section-label" data-i18n="howLabel">协议机制</div>
+      <h2 class="section-title" style="text-align:center;margin:0 auto 16px;" data-i18n="howTitle">NexYield 如何运作</h2>
+      <p class="section-sub" style="margin:0 auto;text-align:center;" data-i18n="howSub">四个步骤，享受机构级收益。</p>
     </div>
     <div class="steps">
       <div class="step">
         <div class="step-num">01</div>
         <div class="step-icon">🔗</div>
-        <h4>Connect &amp; Deposit</h4>
-        <p>Connect your wallet and deposit NYD tokens into any vault. Minimum 100 tokens. No lock-up period.</p>
+        <h4 data-i18n="step1Title">连接并存入</h4>
+        <p data-i18n="step1Desc">连接钱包，将 NYD 代币存入任意金库。最低 100 枚，无锁仓期。</p>
         <div class="step-connector"></div>
       </div>
       <div class="step">
         <div class="step-num">02</div>
         <div class="step-icon">⚡</div>
-        <h4>Strategy Allocation</h4>
-        <p>Smart contracts distribute funds across audited multi-protocol yield strategies — liquidity pools, lending, and delta-neutral positions.</p>
+        <h4 data-i18n="step2Title">策略分配</h4>
+        <p data-i18n="step2Desc">智能合约将资金分配至经过审计的多协议收益策略——流动性池、借贷、Delta 中性头寸。</p>
         <div class="step-connector"></div>
       </div>
       <div class="step">
         <div class="step-num">03</div>
         <div class="step-icon">🔄</div>
-        <h4>Auto-Compounding</h4>
-        <p>Rewards are harvested every 8 hours and reinvested automatically. No gas cost to you. Compound interest works 24/7.</p>
+        <h4 data-i18n="step3Title">自动复投</h4>
+        <p data-i18n="step3Desc">每 8 小时自动收割并再投资奖励，无需支付 Gas，24/7 复利运转。</p>
         <div class="step-connector"></div>
       </div>
       <div class="step">
         <div class="step-num">04</div>
         <div class="step-icon">💰</div>
-        <h4>Withdraw Anytime</h4>
-        <p>No vesting, no lockups. Withdraw your principal plus all accumulated yield at any time with a single transaction.</p>
+        <h4 data-i18n="step4Title">随时提取</h4>
+        <p data-i18n="step4Desc">无归属期，无锁仓。随时一笔交易提取本金及所有累积收益。</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ─── TOKENOMICS ────────────────────────────────────── -->
+<!-- ─── TOKENOMICS ─── -->
 <section id="tokenomics">
   <div class="container">
-    <div class="section-label">Token Economics</div>
-    <h2 class="section-title">NYD Tokenomics</h2>
-    <p class="section-sub">Designed for long-term sustainability — not pump-and-dump dynamics.</p>
-
+    <div class="section-label" data-i18n="tokoLabel">代币经济</div>
+    <h2 class="section-title" data-i18n="tokoTitle">NYD 代币经济</h2>
+    <p class="section-sub" data-i18n="tokoSub">为长期可持续性而设计，拒绝拉高出货逻辑。</p>
     <div class="toko-grid">
       <div>
-        <!-- SVG Donut Chart -->
         <div class="toko-chart">
           <svg class="toko-donut" width="280" height="280" viewBox="0 0 280 280">
-            <!-- Total supply circle, use stroke-dasharray trick -->
-            <!-- Background circle -->
             <circle cx="140" cy="140" r="110" fill="none" stroke="rgba(255,255,255,0.04)" stroke-width="40"/>
-            <!-- Staking Rewards 35% - accent -->
-            <circle cx="140" cy="140" r="110" fill="none" stroke="#00e5ff" stroke-width="40"
-              stroke-dasharray="241 690" stroke-dashoffset="0" opacity="0.9"/>
-            <!-- Liquidity 25% - accent2 -->
-            <circle cx="140" cy="140" r="110" fill="none" stroke="#7b5cfa" stroke-width="40"
-              stroke-dasharray="172 690" stroke-dashoffset="-241" opacity="0.9"/>
-            <!-- Team 15% - gold -->
-            <circle cx="140" cy="140" r="110" fill="none" stroke="#f5c842" stroke-width="40"
-              stroke-dasharray="103 690" stroke-dashoffset="-413" opacity="0.9"/>
-            <!-- Ecosystem 15% - green -->
-            <circle cx="140" cy="140" r="110" fill="none" stroke="#00d97e" stroke-width="40"
-              stroke-dasharray="103 690" stroke-dashoffset="-516" opacity="0.9"/>
-            <!-- Reserve 10% - muted -->
-            <circle cx="140" cy="140" r="110" fill="none" stroke="#6b7399" stroke-width="40"
-              stroke-dasharray="69 690" stroke-dashoffset="-619" opacity="0.9"/>
+            <circle cx="140" cy="140" r="110" fill="none" stroke="#00e5ff" stroke-width="40" stroke-dasharray="241 690" stroke-dashoffset="0" opacity="0.9"/>
+            <circle cx="140" cy="140" r="110" fill="none" stroke="#7b5cfa" stroke-width="40" stroke-dasharray="172 690" stroke-dashoffset="-241" opacity="0.9"/>
+            <circle cx="140" cy="140" r="110" fill="none" stroke="#f5c842" stroke-width="40" stroke-dasharray="103 690" stroke-dashoffset="-413" opacity="0.9"/>
+            <circle cx="140" cy="140" r="110" fill="none" stroke="#00d97e" stroke-width="40" stroke-dasharray="103 690" stroke-dashoffset="-516" opacity="0.9"/>
+            <circle cx="140" cy="140" r="110" fill="none" stroke="#6b7399" stroke-width="40" stroke-dasharray="69 690" stroke-dashoffset="-619" opacity="0.9"/>
           </svg>
           <div class="toko-center">
-            <div class="toko-center-val">1B</div>
-            <div class="toko-center-lbl">Total Supply</div>
+            <div class="toko-center-val">10亿</div>
+            <div class="toko-center-lbl" data-i18n="totalSupply">总发行量</div>
           </div>
         </div>
         <div class="tax-box" style="margin-top:32px;">
-          <div class="tax-title">Tax Breakdown (1% Total)</div>
-          <div class="tax-row">
-            <span class="tax-key">Buy Tax</span><span class="tax-val">1%</span>
-          </div>
-          <div class="tax-row">
-            <span class="tax-key">Sell Tax</span><span class="tax-val">1%</span>
-          </div>
-          <div class="tax-row">
-            <span class="tax-key">→ Staker Rewards</span><span class="tax-val" style="color:var(--green);">0.5%</span>
-          </div>
-          <div class="tax-row">
-            <span class="tax-key">→ Protocol Treasury</span><span class="tax-val" style="color:var(--accent2);">0.3%</span>
-          </div>
-          <div class="tax-row">
-            <span class="tax-key">→ Auto-Buyback &amp; Burn</span><span class="tax-val" style="color:var(--gold);">0.2%</span>
-          </div>
+          <div class="tax-title" data-i18n="taxBreakdown">税率分配（共 1%）</div>
+          <div class="tax-row"><span class="tax-key" data-i18n="buyTax">买入税</span><span class="tax-val">1%</span></div>
+          <div class="tax-row"><span class="tax-key" data-i18n="sellTax">卖出税</span><span class="tax-val">1%</span></div>
+          <div class="tax-row"><span class="tax-key" data-i18n="stakerRewards">→ 质押者奖励</span><span class="tax-val" style="color:var(--green);">0.5%</span></div>
+          <div class="tax-row"><span class="tax-key" data-i18n="treasury">→ 协议国库</span><span class="tax-val" style="color:var(--accent2);">0.3%</span></div>
+          <div class="tax-row"><span class="tax-key" data-i18n="buyback">→ 自动回购销毁</span><span class="tax-val" style="color:var(--gold);">0.2%</span></div>
         </div>
       </div>
-
       <div>
         <div class="toko-list">
           <div class="toko-item">
-            <div class="toko-item-left">
-              <div class="toko-dot" style="background:#00e5ff;"></div>
-              <div>
-                <div class="toko-name">Staking Rewards</div>
-                <div class="toko-sub">Distributed to stakers over 4 years</div>
-              </div>
-            </div>
-            <div style="text-align:right;">
-              <div class="toko-pct">35%</div>
-              <div class="toko-sub">350M NYD</div>
-            </div>
+            <div class="toko-item-left"><div class="toko-dot" style="background:#00e5ff;"></div><div><div class="toko-name" data-i18n="tokoStaking">质押奖励</div><div class="toko-sub" data-i18n="tokoStakingSub">4 年内分配给质押者</div></div></div>
+            <div style="text-align:right;"><div class="toko-pct">35%</div><div class="toko-sub">350M NYD</div></div>
           </div>
           <div class="toko-item">
-            <div class="toko-item-left">
-              <div class="toko-dot" style="background:#7b5cfa;"></div>
-              <div>
-                <div class="toko-name">Liquidity Pool</div>
-                <div class="toko-sub">Locked 2 years via Unicrypt</div>
-              </div>
-            </div>
-            <div style="text-align:right;">
-              <div class="toko-pct">25%</div>
-              <div class="toko-sub">250M NYD</div>
-            </div>
+            <div class="toko-item-left"><div class="toko-dot" style="background:#7b5cfa;"></div><div><div class="toko-name" data-i18n="tokoLp">流动性池</div><div class="toko-sub" data-i18n="tokoLpSub">通过 Unicrypt 锁定 2 年</div></div></div>
+            <div style="text-align:right;"><div class="toko-pct">25%</div><div class="toko-sub">250M NYD</div></div>
           </div>
           <div class="toko-item">
-            <div class="toko-item-left">
-              <div class="toko-dot" style="background:#f5c842;"></div>
-              <div>
-                <div class="toko-name">Team &amp; Advisors</div>
-                <div class="toko-sub">12-month cliff, 24-month vest</div>
-              </div>
-            </div>
-            <div style="text-align:right;">
-              <div class="toko-pct">15%</div>
-              <div class="toko-sub">150M NYD</div>
-            </div>
+            <div class="toko-item-left"><div class="toko-dot" style="background:#f5c842;"></div><div><div class="toko-name" data-i18n="tokoTeam">团队 &amp; 顾问</div><div class="toko-sub" data-i18n="tokoTeamSub">12 月悬崖期，24 月归属期</div></div></div>
+            <div style="text-align:right;"><div class="toko-pct">15%</div><div class="toko-sub">150M NYD</div></div>
           </div>
           <div class="toko-item">
-            <div class="toko-item-left">
-              <div class="toko-dot" style="background:#00d97e;"></div>
-              <div>
-                <div class="toko-name">Ecosystem Fund</div>
-                <div class="toko-sub">Grants, integrations, partnerships</div>
-              </div>
-            </div>
-            <div style="text-align:right;">
-              <div class="toko-pct">15%</div>
-              <div class="toko-sub">150M NYD</div>
-            </div>
+            <div class="toko-item-left"><div class="toko-dot" style="background:#00d97e;"></div><div><div class="toko-name" data-i18n="tokoEco">生态基金</div><div class="toko-sub" data-i18n="tokoEcoSub">赠款、集成、合作</div></div></div>
+            <div style="text-align:right;"><div class="toko-pct">15%</div><div class="toko-sub">150M NYD</div></div>
           </div>
           <div class="toko-item">
-            <div class="toko-item-left">
-              <div class="toko-dot" style="background:#6b7399;"></div>
-              <div>
-                <div class="toko-name">Reserve</div>
-                <div class="toko-sub">Governed by DAO multisig</div>
-              </div>
-            </div>
-            <div style="text-align:right;">
-              <div class="toko-pct">10%</div>
-              <div class="toko-sub">100M NYD</div>
-            </div>
+            <div class="toko-item-left"><div class="toko-dot" style="background:#6b7399;"></div><div><div class="toko-name" data-i18n="tokoReserve">储备金</div><div class="toko-sub" data-i18n="tokoReserveSub">DAO 多签治理</div></div></div>
+            <div style="text-align:right;"><div class="toko-pct">10%</div><div class="toko-sub">100M NYD</div></div>
           </div>
         </div>
-
         <div style="padding:20px;border-radius:14px;border:1px solid var(--border);background:var(--bg3);margin-top:16px;">
-          <div style="font-family:'Syne',sans-serif;font-size:14px;font-weight:700;margin-bottom:12px;">Token Details</div>
+          <div style="font-family:'Syne',sans-serif;font-size:14px;font-weight:700;margin-bottom:12px;" data-i18n="tokenDetails">代币详情</div>
           <div style="display:flex;flex-direction:column;gap:8px;">
-            <div style="display:flex;justify-content:space-between;font-size:13px;">
-              <span style="color:var(--muted);">Token Name</span><span style="font-weight:600;">NexYield</span>
-            </div>
-            <div style="display:flex;justify-content:space-between;font-size:13px;">
-              <span style="color:var(--muted);">Ticker</span><span style="font-weight:600;">NYD</span>
-            </div>
-            <div style="display:flex;justify-content:space-between;font-size:13px;">
-              <span style="color:var(--muted);">Network</span><span style="font-weight:600;">Flap (EVM)</span>
-            </div>
-            <div style="display:flex;justify-content:space-between;font-size:13px;">
-              <span style="color:var(--muted);">Total Supply</span><span style="font-weight:600;">1,000,000,000</span>
-            </div>
-            <div style="display:flex;justify-content:space-between;font-size:13px;">
-              <span style="color:var(--muted);">Decimals</span><span style="font-weight:600;">18</span>
-            </div>
-            <div style="display:flex;justify-content:space-between;font-size:13px;">
-              <span style="color:var(--muted);">Tax (Buy/Sell)</span><span style="font-weight:600;color:var(--accent);">1% / 1%</span>
-            </div>
+            <div style="display:flex;justify-content:space-between;font-size:13px;"><span style="color:var(--muted);" data-i18n="tokenName">代币名称</span><span style="font-weight:600;">NexYield</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:13px;"><span style="color:var(--muted);">Ticker</span><span style="font-weight:600;">NYD</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:13px;"><span style="color:var(--muted);" data-i18n="network">网络</span><span style="font-weight:600;">Flap (EVM)</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:13px;"><span style="color:var(--muted);" data-i18n="supply">总供应量</span><span style="font-weight:600;">1,000,000,000</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:13px;"><span style="color:var(--muted);" data-i18n="tax">税率 (买/卖)</span><span style="font-weight:600;color:var(--accent);">1% / 1%</span></div>
           </div>
         </div>
       </div>
@@ -966,106 +664,72 @@ footer{
   </div>
 </section>
 
-<!-- ─── STAKING APP ────────────────────────────────────── -->
+<!-- ─── APP ─── -->
 <section id="app">
   <div class="container">
-    <div class="section-label">Protocol Interface</div>
-    <h2 class="section-title">Stake NYD. Earn Yield.</h2>
-    <p class="section-sub">Connect your wallet and start earning institutional-grade yields with a minimum of 100 NYD tokens.</p>
+    <div class="section-label" data-i18n="appLabel">协议界面</div>
+    <h2 class="section-title" data-i18n="appTitle">质押 NYD，赚取收益</h2>
+    <p class="section-sub" data-i18n="appSub">连接钱包，最低 100 枚 NYD，即可开始获取机构级收益。</p>
     <div class="app-grid">
-      <!-- Stake Panel -->
       <div class="app-card">
-        <h3>Stake NYD</h3>
-        <p style="font-size:13px;color:var(--muted);">Auto-compounding vault — rewards every 8 hours</p>
+        <h3 data-i18n="stakeNYD">质押 NYD</h3>
+        <p style="font-size:13px;color:var(--muted);" data-i18n="autoCompound">自动复投金库 — 每 8 小时结算一次奖励</p>
         <div class="apy">38.7%</div>
-        <div class="apy-lbl">Current APY (7-day avg)</div>
+        <div class="apy-lbl" data-i18n="currentApy">当前年化（7日均值）</div>
         <div class="reward-box">
-          <div class="reward-row">
-            <span class="reward-key">Your Staked Balance</span>
-            <span class="reward-val" id="stakedBal">— NYD</span>
-          </div>
-          <div class="reward-row">
-            <span class="reward-key">Claimable Rewards</span>
-            <span class="reward-val green" id="claimable">— NYD</span>
-          </div>
-          <div class="reward-row">
-            <span class="reward-key">Next Compound</span>
-            <span class="reward-val" id="nextCompound">8h 00m</span>
-          </div>
+          <div class="reward-row"><span class="reward-key" data-i18n="stakedBal">您的质押余额</span><span class="reward-val" id="stakedBal">— NYD</span></div>
+          <div class="reward-row"><span class="reward-key" data-i18n="claimable">可领取奖励</span><span class="reward-val green" id="claimable">— NYD</span></div>
+          <div class="reward-row"><span class="reward-key" data-i18n="nextCompoundLabel">下次复投</span><span class="reward-val" id="nextCompound">8h 00m</span></div>
         </div>
         <div class="input-row">
-          <div class="input-lbl">Amount to Stake <span onclick="setMax('stakeInput')">MAX</span></div>
+          <div class="input-lbl"><span data-i18n="stakeAmount">质押数量</span> <span onclick="setMax('stakeInput')" data-i18n="max">最大</span></div>
           <input class="token-input" id="stakeInput" type="number" placeholder="0.00 NYD" min="100">
         </div>
-        <button class="btn-stake" id="stakeBtn" onclick="handleStake()" disabled>Connect Wallet to Stake</button>
+        <button class="btn-stake" id="stakeBtn" onclick="handleStake()" disabled data-i18n="connectToStake">连接钱包以质押</button>
       </div>
-      <!-- Unstake / Rewards Panel -->
       <div class="app-card">
-        <h3>Manage Position</h3>
-        <p style="font-size:13px;color:var(--muted);">Withdraw or claim rewards at any time, no lockup</p>
+        <h3 data-i18n="managePos">管理仓位</h3>
+        <p style="font-size:13px;color:var(--muted);" data-i18n="withdrawNote">随时提取或领取奖励，无锁仓限制</p>
         <div class="apy" style="color:var(--accent2);">0.00</div>
-        <div class="apy-lbl">Total Earned (NYD)</div>
+        <div class="apy-lbl" data-i18n="totalEarned">总收益（NYD）</div>
         <div class="reward-box">
-          <div class="reward-row">
-            <span class="reward-key">Portfolio Value</span>
-            <span class="reward-val" id="portfolioVal">$0.00</span>
-          </div>
-          <div class="reward-row">
-            <span class="reward-key">All-time Earnings</span>
-            <span class="reward-val green" id="allTimeEarned">+0.00 NYD</span>
-          </div>
-          <div class="reward-row">
-            <span class="reward-key">Compound Cycles</span>
-            <span class="reward-val" id="compoundCycles">0</span>
-          </div>
+          <div class="reward-row"><span class="reward-key" data-i18n="portfolioVal">持仓价值</span><span class="reward-val" id="portfolioVal">$0.00</span></div>
+          <div class="reward-row"><span class="reward-key" data-i18n="allTimeEarned">历史总收益</span><span class="reward-val green" id="allTimeEarned">+0.00 NYD</span></div>
+          <div class="reward-row"><span class="reward-key" data-i18n="compoundCycles">复投次数</span><span class="reward-val" id="compoundCycles">0</span></div>
         </div>
         <div class="input-row">
-          <div class="input-lbl">Amount to Unstake <span onclick="setMax('unstakeInput')">MAX</span></div>
+          <div class="input-lbl"><span data-i18n="unstakeAmount">提取数量</span> <span onclick="setMax('unstakeInput')" data-i18n="max">最大</span></div>
           <input class="token-input" id="unstakeInput" type="number" placeholder="0.00 NYD">
         </div>
-        <button class="btn-stake" id="unstakeBtn" onclick="handleUnstake()" disabled style="background:linear-gradient(135deg,var(--accent2),#5a3fd4);">Connect Wallet to Unstake</button>
+        <button class="btn-stake" id="unstakeBtn" onclick="handleUnstake()" disabled style="background:linear-gradient(135deg,var(--accent2),#5a3fd4);" data-i18n="connectToUnstake">连接钱包以提取</button>
       </div>
     </div>
-
-    <!-- Live Protocol Stats -->
     <div style="margin-top:32px;display:grid;grid-template-columns:repeat(4,1fr);gap:16px;">
-      <div style="padding:20px;border-radius:14px;border:1px solid var(--border);background:var(--bg3);text-align:center;">
-        <div style="font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:var(--green);">$4.2M</div>
-        <div style="font-size:12px;color:var(--muted);margin-top:4px;">Total Value Locked</div>
-      </div>
-      <div style="padding:20px;border-radius:14px;border:1px solid var(--border);background:var(--bg3);text-align:center;">
-        <div style="font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:var(--accent);">38.7%</div>
-        <div style="font-size:12px;color:var(--muted);margin-top:4px;">Average APY</div>
-      </div>
-      <div style="padding:20px;border-radius:14px;border:1px solid var(--border);background:var(--bg3);text-align:center;">
-        <div style="font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:var(--gold);">$183K</div>
-        <div style="font-size:12px;color:var(--muted);margin-top:4px;">Rewards Distributed</div>
-      </div>
-      <div style="padding:20px;border-radius:14px;border:1px solid var(--border);background:var(--bg3);text-align:center;">
-        <div style="font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:var(--accent2);">12,400</div>
-        <div style="font-size:12px;color:var(--muted);margin-top:4px;">Active Stakers</div>
-      </div>
+      <div style="padding:20px;border-radius:14px;border:1px solid var(--border);background:var(--bg3);text-align:center;"><div style="font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:var(--green);">$4.2M</div><div style="font-size:12px;color:var(--muted);margin-top:4px;" data-i18n="tvl">总锁仓量</div></div>
+      <div style="padding:20px;border-radius:14px;border:1px solid var(--border);background:var(--bg3);text-align:center;"><div style="font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:var(--accent);">38.7%</div><div style="font-size:12px;color:var(--muted);margin-top:4px;" data-i18n="avgApy">平均年化</div></div>
+      <div style="padding:20px;border-radius:14px;border:1px solid var(--border);background:var(--bg3);text-align:center;"><div style="font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:var(--gold);">$183K</div><div style="font-size:12px;color:var(--muted);margin-top:4px;" data-i18n="rewardsDistributed">已分配奖励</div></div>
+      <div style="padding:20px;border-radius:14px;border:1px solid var(--border);background:var(--bg3);text-align:center;"><div style="font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:var(--accent2);">12,400</div><div style="font-size:12px;color:var(--muted);margin-top:4px;" data-i18n="stakers">活跃质押者</div></div>
     </div>
   </div>
 </section>
 
-<!-- ─── ROADMAP ───────────────────────────────────────── -->
+<!-- ─── ROADMAP ─── -->
 <section id="roadmap">
   <div class="container">
-    <div class="section-label">Development Timeline</div>
-    <h2 class="section-title">Roadmap</h2>
-    <p class="section-sub">Building toward a fully permissionless, community-governed yield layer.</p>
+    <div class="section-label" data-i18n="roadmapLabel">开发时间线</div>
+    <h2 class="section-title" data-i18n="roadmapTitle">路线图</h2>
+    <p class="section-sub" data-i18n="roadmapSub">构建完全无许可、社区治理的收益层。</p>
     <div class="roadmap-timeline">
       <div class="road-item">
         <div class="road-dot done"></div>
         <div class="road-quarter">Q1 2025</div>
         <div class="road-card">
-          <h4>Foundation ✅</h4>
+          <h4 data-i18n="q1Title">基础建设 ✅</h4>
           <ul>
-            <li class="done-item">Smart contract development</li>
-            <li class="done-item">Security audit (CertiK)</li>
-            <li class="done-item">Flap launchpad listing</li>
-            <li class="done-item">Liquidity pool bootstrap</li>
+            <li class="done-item" data-i18n="q1a">智能合约开发</li>
+            <li class="done-item" data-i18n="q1b">安全审计（CertiK）</li>
+            <li class="done-item" data-i18n="q1c">Flap 平台上线</li>
+            <li class="done-item" data-i18n="q1d">流动性池启动</li>
           </ul>
         </div>
       </div>
@@ -1073,12 +737,12 @@ footer{
         <div class="road-dot done"></div>
         <div class="road-quarter">Q2 2025</div>
         <div class="road-card">
-          <h4>Protocol Launch ✅</h4>
+          <h4 data-i18n="q2Title">协议上线 ✅</h4>
           <ul>
-            <li class="done-item">V1 staking vault live</li>
-            <li class="done-item">Auto-compound engine</li>
-            <li class="done-item">Dashboard v1</li>
-            <li>CEX listing (Tier 2)</li>
+            <li class="done-item" data-i18n="q2a">V1 质押金库上线</li>
+            <li class="done-item" data-i18n="q2b">自动复投引擎</li>
+            <li class="done-item" data-i18n="q2c">仪表盘 v1</li>
+            <li data-i18n="q2d">二线 CEX 上市</li>
           </ul>
         </div>
       </div>
@@ -1086,12 +750,12 @@ footer{
         <div class="road-dot"></div>
         <div class="road-quarter">Q3 2025</div>
         <div class="road-card">
-          <h4>Expansion 🔨</h4>
+          <h4 data-i18n="q3Title">扩展阶段 🔨</h4>
           <ul>
-            <li>Multi-strategy vaults</li>
-            <li>Governance token (veNYD)</li>
-            <li>Cross-chain bridge</li>
-            <li>Analytics dashboard</li>
+            <li data-i18n="q3a">多策略金库</li>
+            <li data-i18n="q3b">治理代币（veNYD）</li>
+            <li data-i18n="q3c">跨链桥接</li>
+            <li data-i18n="q3d">数据分析仪表盘</li>
           </ul>
         </div>
       </div>
@@ -1099,12 +763,12 @@ footer{
         <div class="road-dot"></div>
         <div class="road-quarter">Q4 2025</div>
         <div class="road-card">
-          <h4>DAO &amp; Scale 🚀</h4>
+          <h4 data-i18n="q4Title">DAO &amp; 规模化 🚀</h4>
           <ul>
-            <li>Full DAO governance</li>
-            <li>Institutional vault tiers</li>
-            <li>Mobile app launch</li>
-            <li>Top-5 CEX listing</li>
+            <li data-i18n="q4a">完整 DAO 治理</li>
+            <li data-i18n="q4b">机构金库层级</li>
+            <li data-i18n="q4c">移动端 App</li>
+            <li data-i18n="q4d">头部 CEX 上市</li>
           </ul>
         </div>
       </div>
@@ -1112,147 +776,42 @@ footer{
   </div>
 </section>
 
-<!-- ─── TWEETS ────────────────────────────────────────── -->
+<!-- ─── COMMUNITY / TWEETS ─── -->
 <section id="community">
   <div class="container">
-    <div class="section-label">Community & Social</div>
-    <h2 class="section-title">What They're Saying</h2>
-    <p class="section-sub">10 promotional tweets to spread the word about NexYield.</p>
+    <div class="section-label" data-i18n="communityLabel">社区 &amp; 社交</div>
+    <h2 class="section-title" data-i18n="communityTitle">他们都在说什么</h2>
+    <p class="section-sub" data-i18n="communitySub">10 条推广推文，让世界认识 NexYield。</p>
     <div class="tweet-grid">
+      <div class="tweet-card"><div class="tweet-header"><div class="tweet-avatar">NY</div><div><div class="tweet-name">NexYield</div><div class="tweet-handle">@NexYield_DeFi</div></div></div><div class="tweet-body">🚀 <span class="tag">#NexYield</span> 正式上线 <span class="tag">@FlapDeFi</span><br><br>✅ 税率仅 1%（买卖相同）<br>✅ 年化 38.7% 质押收益<br>✅ 每 8 小时自动复投<br>✅ 无锁仓限制<br><br>DeFi 收益，人人可及。CA 见下方 👇 <span class="tag">#NYD #Flap</span></div><div class="tweet-footer"><span class="tweet-action">♥ 2.4K</span><span class="tweet-action">🔁 891</span></div></div>
 
-      <div class="tweet-card">
-        <div class="tweet-header">
-          <div class="tweet-avatar">NY</div>
-          <div><div class="tweet-name">NexYield</div><div class="tweet-handle">@NexYield_DeFi</div></div>
-        </div>
-        <div class="tweet-body">🚀 Introducing <span class="tag">#NexYield</span> — the first auto-compounding yield protocol on <span class="tag">@FlapDeFi</span>.<br><br>✅ Only 1% tax (buy &amp; sell)<br>✅ 38.7% APY on stake<br>✅ Auto-compounds every 8 hours<br>✅ No lockups<br><br>DeFi yield, democratized. CA below 👇<br><br><span class="tag">#NYD #Flap #DeFi</span></div>
-        <div class="tweet-footer">
-          <span class="tweet-action">♥ 2.4K</span>
-          <span class="tweet-action">🔁 891</span>
-        </div>
-      </div>
+      <div class="tweet-card"><div class="tweet-header"><div class="tweet-avatar">NY</div><div><div class="tweet-name">NexYield</div><div class="tweet-handle">@NexYield_DeFi</div></div></div><div class="tweet-body">💡 为什么散户在 DeFi 里总是输？<br><br>因为最好的收益策略要求 10 万美元门槛，还需要手动复投。<br><br><span class="tag">#NexYield</span> 解决了这个问题。最低质押 = 100 $NYD。自动复投 = 永远在线。<br><br>别再让收益白白流失了。</div><div class="tweet-footer"><span class="tweet-action">♥ 1.8K</span><span class="tweet-action">🔁 634</span></div></div>
 
-      <div class="tweet-card">
-        <div class="tweet-header">
-          <div class="tweet-avatar">NY</div>
-          <div><div class="tweet-name">NexYield</div><div class="tweet-handle">@NexYield_DeFi</div></div>
-        </div>
-        <div class="tweet-body">💡 Why does retail always lose in DeFi?<br><br>Because the best yield strategies require $100K minimums and manual compounding.<br><br><span class="tag">#NexYield</span> fixes this. Min stake = 100 $NYD. Auto-compound = always on.<br><br>Stop leaving yield on the table. 🧵</div>
-        <div class="tweet-footer">
-          <span class="tweet-action">♥ 1.8K</span>
-          <span class="tweet-action">🔁 634</span>
-        </div>
-      </div>
+      <div class="tweet-card"><div class="tweet-header"><div class="tweet-avatar">NY</div><div><div class="tweet-name">NexYield</div><div class="tweet-handle">@NexYield_DeFi</div></div></div><div class="tweet-body">🧮 复利的威力不容小觑。<br><br>38.7% 年化手动每周复投 = 实际 36.1%<br>38.7% 年化每 8 小时自动复投 = 实际 47.3%<br><br>那多出来的 10.2%，就是白拿的钱。<span class="tag">$NYD</span> 自动捕获每一个周期。</div><div class="tweet-footer"><span class="tweet-action">♥ 3.1K</span><span class="tweet-action">🔁 1.2K</span></div></div>
 
-      <div class="tweet-card">
-        <div class="tweet-header">
-          <div class="tweet-avatar">NY</div>
-          <div><div class="tweet-name">NexYield</div><div class="tweet-handle">@NexYield_DeFi</div></div>
-        </div>
-        <div class="tweet-body">🧮 The math behind compound interest is insane.<br><br>38.7% APY manually compounded weekly = 36.1% effective<br>38.7% APY auto-compounded every 8h = 47.3% effective<br><br>That 10.2% difference is literally free money. <span class="tag">#NYD</span> captures every single cycle automatically.</div>
-        <div class="tweet-footer">
-          <span class="tweet-action">♥ 3.1K</span>
-          <span class="tweet-action">🔁 1.2K</span>
-        </div>
-      </div>
+      <div class="tweet-card"><div class="tweet-header"><div class="tweet-avatar">NY</div><div><div class="tweet-name">NexYield</div><div class="tweet-handle">@NexYield_DeFi</div></div></div><div class="tweet-body">🔐 信任与透明不是选项——那就是产品本身。<br><br>$NYD：<br>📋 CertiK 审计<br>🔓 已放弃所有权<br>🔒 流动性锁定 2 年<br>📊 链上收益分配<br><br>这才是 <span class="tag">@FlapDeFi</span> 上正经非 MEME 协议的样子。</div><div class="tweet-footer"><span class="tweet-action">♥ 2.7K</span><span class="tweet-action">🔁 978</span></div></div>
 
-      <div class="tweet-card">
-        <div class="tweet-header">
-          <div class="tweet-avatar">NY</div>
-          <div><div class="tweet-name">NexYield</div><div class="tweet-handle">@NexYield_DeFi</div></div>
-        </div>
-        <div class="tweet-body">🔐 Trust &amp; transparency aren't optional — they're the product.<br><br>$NYD is:<br>📋 CertiK audited<br>🔓 Ownership renounced<br>🔒 Liquidity locked 2 years<br>📊 On-chain revenue distribution<br><br>This is what a legit non-MEME protocol looks like on <span class="tag">@FlapDeFi</span>.</div>
-        <div class="tweet-footer">
-          <span class="tweet-action">♥ 2.7K</span>
-          <span class="tweet-action">🔁 978</span>
-        </div>
-      </div>
+      <div class="tweet-card"><div class="tweet-header"><div class="tweet-avatar">NY</div><div><div class="tweet-name">NexYield</div><div class="tweet-handle">@NexYield_DeFi</div></div></div><div class="tweet-body">📈 6 周内 TVL 达到 420 万美元。<br><br>12,400 名质押者。18.3 万美元奖励已分配。<br><br>Q3 路线图：<br>→ 多策略金库<br>→ veNYD 治理<br>→ 跨链桥<br><br>收益层正在建造。 <span class="tag">#NexYield</span></div><div class="tweet-footer"><span class="tweet-action">♥ 4.2K</span><span class="tweet-action">🔁 1.6K</span></div></div>
 
-      <div class="tweet-card">
-        <div class="tweet-header">
-          <div class="tweet-avatar">NY</div>
-          <div><div class="tweet-name">NexYield</div><div class="tweet-handle">@NexYield_DeFi</div></div>
-        </div>
-        <div class="tweet-body">📈 $4.2M TVL in 6 weeks.<br><br>12,400 stakers. $183K rewards distributed.<br><br>And we're just getting started. Q3 roadmap includes:<br>→ Multi-strategy vaults<br>→ veNYD governance<br>→ Cross-chain bridge<br><br>The yield layer is being built. <span class="tag">#NexYield</span></div>
-        <div class="tweet-footer">
-          <span class="tweet-action">♥ 4.2K</span>
-          <span class="tweet-action">🔁 1.6K</span>
-        </div>
-      </div>
+      <div class="tweet-card"><div class="tweet-header"><div class="tweet-avatar">NY</div><div><div class="tweet-name">NexYield</div><div class="tweet-handle">@NexYield_DeFi</div></div></div><div class="tweet-body">🔥 观点：5%+ 税率代币是软拉盘。<br><br>买 10% 卖 10%，还没做任何事就先割了你 20%。<br><br><span class="tag">$NYD</span> = 固定 1%，仅此而已，没有借口。<br><br>用钱包投票。 <span class="tag">#1PercentTax</span></div><div class="tweet-footer"><span class="tweet-action">♥ 5.8K</span><span class="tweet-action">🔁 2.3K</span></div></div>
 
-      <div class="tweet-card">
-        <div class="tweet-header">
-          <div class="tweet-avatar">NY</div>
-          <div><div class="tweet-name">NexYield</div><div class="tweet-handle">@NexYield_DeFi</div></div>
-        </div>
-        <div class="tweet-body">🔥 Hot take: 5%+ tax tokens are a soft rug.<br><br>If a project charges you 10% to buy and 10% to sell, they've already taken 20% of your investment before doing anything.<br><br><span class="tag">$NYD</span> = 1% flat. That's it. No excuses.<br><br>Vote with your wallet. <span class="tag">#1PercentTax</span></div>
-        <div class="tweet-footer">
-          <span class="tweet-action">♥ 5.8K</span>
-          <span class="tweet-action">🔁 2.3K</span>
-        </div>
-      </div>
+      <div class="tweet-card"><div class="tweet-header"><div class="tweet-avatar">NY</div><div><div class="tweet-name">NexYield</div><div class="tweet-handle">@NexYield_DeFi</div></div></div><div class="tweet-body">🏛️ DeFi 本应让金融民主化。<br><br>结果变成了：<br>→ 只有巨鲸才能进的金库<br>→ Gas 战争<br>→ MEV 机器人吃掉你的交易<br>→ 毫无用处的 MEME 币<br><br><span class="tag">#NexYield</span> 要回归初心。真实收益，真正普及。</div><div class="tweet-footer"><span class="tweet-action">♥ 3.4K</span><span class="tweet-action">🔁 1.1K</span></div></div>
 
-      <div class="tweet-card">
-        <div class="tweet-header">
-          <div class="tweet-avatar">NY</div>
-          <div><div class="tweet-name">NexYield</div><div class="tweet-handle">@NexYield_DeFi</div></div>
-        </div>
-        <div class="tweet-body">🏛️ DeFi was supposed to democratize finance.<br><br>Somewhere along the way, "DeFi" became:<br>→ Whale-only vaults<br>→ Gas wars<br>→ MEV bots eating your trades<br>→ MEME coins with no utility<br><br><span class="tag">#NexYield</span> is going back to the original vision. Real yield. Real access.</div>
-        <div class="tweet-footer">
-          <span class="tweet-action">♥ 3.4K</span>
-          <span class="tweet-action">🔁 1.1K</span>
-        </div>
-      </div>
+      <div class="tweet-card"><div class="tweet-header"><div class="tweet-avatar">NY</div><div><div class="tweet-name">NexYield</div><div class="tweet-handle">@NexYield_DeFi</div></div></div><div class="tweet-body">🎯 NexYield 代币经济，一句话解释：<br><br>每笔交易 1% 税率分配：<br>→ 0.5% 给质押者（别人交易，你赚钱）<br>→ 0.3% 入国库（资助开发）<br>→ 0.2% 自动回购销毁（通缩）<br><br>协议为持有者工作，不是对抗持有者。 <span class="tag">#NYD</span></div><div class="tweet-footer"><span class="tweet-action">♥ 6.1K</span><span class="tweet-action">🔁 2.7K</span></div></div>
 
-      <div class="tweet-card">
-        <div class="tweet-header">
-          <div class="tweet-avatar">NY</div>
-          <div><div class="tweet-name">NexYield</div><div class="tweet-handle">@NexYield_DeFi</div></div>
-        </div>
-        <div class="tweet-body">🎯 NexYield tokenomics, explained simply:<br><br>1% tax on every trade splits into:<br>→ 0.5% to stakers (you earn when others trade)<br>→ 0.3% to treasury (funds development)<br>→ 0.2% auto-buyback &amp; burn (deflationary)<br><br>The protocol works FOR holders, not against them. <span class="tag">#NYD</span></div>
-        <div class="tweet-footer">
-          <span class="tweet-action">♥ 6.1K</span>
-          <span class="tweet-action">🔁 2.7K</span>
-        </div>
-      </div>
+      <div class="tweet-card"><div class="tweet-header"><div class="tweet-avatar">NY</div><div><div class="tweet-name">NexYield</div><div class="tweet-handle">@NexYield_DeFi</div></div></div><div class="tweet-body">🌐 <span class="tag">@FlapDeFi</span> 生态需要一个骨干。<br><br>快速兑换很好，但用户把资金停在哪里赚收益呢？<br><br>这就是 <span class="tag">$NYD</span> 填补的空缺。我们不是在和 AMM 竞争——我们是让它们更有价值的收益层。</div><div class="tweet-footer"><span class="tweet-action">♥ 2.9K</span><span class="tweet-action">🔁 887</span></div></div>
 
-      <div class="tweet-card">
-        <div class="tweet-header">
-          <div class="tweet-avatar">NY</div>
-          <div><div class="tweet-name">NexYield</div><div class="tweet-handle">@NexYield_DeFi</div></div>
-        </div>
-        <div class="tweet-body">🌐 The <span class="tag">@FlapDeFi</span> ecosystem needs a backbone.<br><br>Fast swaps are great. But where do people park their capital and earn yield?<br><br>That's the gap <span class="tag">$NYD</span> fills. We're not competing with AMMs — we're the yield layer that makes them more useful.</div>
-        <div class="tweet-footer">
-          <span class="tweet-action">♥ 2.9K</span>
-          <span class="tweet-action">🔁 887</span>
-        </div>
-      </div>
-
-      <div class="tweet-card">
-        <div class="tweet-header">
-          <div class="tweet-avatar">NY</div>
-          <div><div class="tweet-name">NexYield</div><div class="tweet-handle">@NexYield_DeFi</div></div>
-        </div>
-        <div class="tweet-body">👀 Still sleeping on <span class="tag">$NYD</span>?<br><br>Here's your reminder:<br>💎 $4.2M TVL growing weekly<br>⚡ 38.7% APY auto-compounding<br>🔐 Audited + renounced + locked LP<br>💸 Only 1% tax<br>🚀 Roadmap: DAO, cross-chain, mobile<br><br>Built on Flap. Built for everyone. LFG 🔥</div>
-        <div class="tweet-footer">
-          <span class="tweet-action">♥ 8.4K</span>
-          <span class="tweet-action">🔁 3.9K</span>
-        </div>
-      </div>
-
+      <div class="tweet-card"><div class="tweet-header"><div class="tweet-avatar">NY</div><div><div class="tweet-name">NexYield</div><div class="tweet-handle">@NexYield_DeFi</div></div></div><div class="tweet-body">👀 还没关注 <span class="tag">$NYD</span>？<br><br>这是你的提醒：<br>💎 TVL $420万 持续增长<br>⚡ 38.7% 年化自动复投<br>🔐 审计 + 放弃所有权 + LP 锁定<br>💸 只有 1% 税<br>🚀 路线图：DAO、跨链、移动端<br><br>建在 Flap，为所有人而建。LFG 🔥</div><div class="tweet-footer"><span class="tweet-action">♥ 8.4K</span><span class="tweet-action">🔁 3.9K</span></div></div>
     </div>
   </div>
 </section>
 
-<!-- ─── FOOTER ────────────────────────────────────────── -->
+<!-- ─── FOOTER ─── -->
 <footer>
   <div class="footer-grid">
     <div class="footer-brand">
-      <a href="#" class="logo" style="text-decoration:none;display:inline-flex;">
-        <div class="logo-mark">NY</div>
-        NexYield
-      </a>
-      <p>The next-generation yield aggregation protocol on Flap. Institutional strategies, democratized for everyone.</p>
+      <a href="#" class="logo" style="display:inline-flex;"><div class="logo-mark">NY</div>NexYield</a>
+      <p data-i18n="footerDesc">Flap 链上下一代收益聚合协议。机构策略，人人可及。</p>
       <div style="display:flex;gap:12px;margin-top:20px;">
         <button class="btn-outline" style="font-size:12px;padding:7px 14px;" onclick="window.open('https://x.com/NexYield_DeFi','_blank')">𝕏 Twitter</button>
         <button class="btn-outline" style="font-size:12px;padding:7px 14px;" onclick="window.open('https://t.me/NexYield','_blank')">Telegram</button>
@@ -1260,30 +819,30 @@ footer{
       </div>
     </div>
     <div class="footer-col">
-      <h5>Protocol</h5>
-      <a href="#app">Stake NYD</a>
-      <a href="#tokenomics">Tokenomics</a>
-      <a href="#how">How It Works</a>
-      <a href="#roadmap">Roadmap</a>
+      <h5 data-i18n="footerProtocol">协议</h5>
+      <a href="#app" data-i18n="navStake">质押</a>
+      <a href="#tokenomics" data-i18n="navToko">代币经济</a>
+      <a href="#how" data-i18n="navHow">运作机制</a>
+      <a href="#roadmap" data-i18n="navRoadmap">路线图</a>
     </div>
     <div class="footer-col">
-      <h5>Resources</h5>
-      <a href="#">Documentation</a>
-      <a href="#">Smart Contract</a>
-      <a href="#">Audit Report</a>
+      <h5 data-i18n="footerResources">资源</h5>
+      <a href="#" data-i18n="docs">文档</a>
+      <a href="#" data-i18n="contract">智能合约</a>
+      <a href="#" data-i18n="audit">审计报告</a>
       <a href="#">GitHub</a>
     </div>
     <div class="footer-col">
-      <h5>Legal</h5>
-      <a href="#">Terms of Use</a>
-      <a href="#">Privacy Policy</a>
-      <a href="#">Disclaimer</a>
-      <a href="#">Cookie Policy</a>
+      <h5 data-i18n="footerLegal">法律</h5>
+      <a href="#" data-i18n="terms">使用条款</a>
+      <a href="#" data-i18n="privacy">隐私政策</a>
+      <a href="#" data-i18n="disclaimer">免责声明</a>
+      <a href="#" data-i18n="cookie">Cookie 政策</a>
     </div>
   </div>
   <div class="footer-bottom">
-    <span>© 2025 NexYield Protocol. All rights reserved.</span>
-    <span style="color:var(--green);font-weight:600;">● Protocol Operational</span>
+    <span data-i18n="copyright">© 2025 NexYield 协议. 版权所有.</span>
+    <span style="color:var(--green);font-weight:600;" data-i18n="operational">● 协议运行中</span>
   </div>
 </footer>
 
@@ -1292,123 +851,291 @@ footer{
 const cursor = document.getElementById('cursor');
 const ring = document.getElementById('cursorRing');
 let mx=0,my=0,rx=0,ry=0;
-document.addEventListener('mousemove',e=>{
-  mx=e.clientX; my=e.clientY;
-  cursor.style.left=mx+'px'; cursor.style.top=my+'px';
-});
-(function animRing(){
-  rx+=(mx-rx)*0.12; ry+=(my-ry)*0.12;
-  ring.style.left=rx+'px'; ring.style.top=ry+'px';
-  requestAnimationFrame(animRing);
-})();
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cursor.style.left=mx+'px';cursor.style.top=my+'px';});
+(function anim(){rx+=(mx-rx)*0.12;ry+=(my-ry)*0.12;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(anim);})();
 document.querySelectorAll('button,a,[onclick]').forEach(el=>{
   el.addEventListener('mouseenter',()=>{ring.style.transform='translate(-50%,-50%) scale(1.5)';ring.style.borderColor='var(--accent)';});
   el.addEventListener('mouseleave',()=>{ring.style.transform='translate(-50%,-50%) scale(1)';ring.style.borderColor='rgba(0,229,255,0.5)';});
 });
 
-// ─── State ────────────────────────────────────────────
+// ═══════════════════════════════════════════════════════
+// ★★★★★  合约地址 CA — 核心常量  ★★★★★
+// ★  CONTRACT ADDRESS — CORE CONSTANT                  ★
+// ★  CA: 0x4E3a8F2c1B9d7A0e5C6bD84f1E2A3C7B9D0F5E8A   ★
+// ★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★
+const CA_ADDRESS = '0x4E3a8F2c1B9d7A0e5C6bD84f1E2A3C7B9D0F5E8A';
+// ═══════════════════════════════════════════════════════
+
 let connectedAddress = null;
-const CA = '0x4E3a8F2c1B9d7A0e5C6bD84f1E2A3C7B9D0F5E8A';
+let currentLang = 'zh';
 
-// ─── Toast ────────────────────────────────────────────
+// ─── i18n ──────────────────────────────────────────────
+const STRINGS = {
+  zh: {
+    connectWallet:'连接钱包', selectWallet:'选择您偏好的钱包',
+    installed:'已安装', notInstalled:'未安装',
+    mmDesc:'最流行的浏览器钱包', okxDesc:'OKX 官方 Web3 钱包',
+    wcScan:'扫码连接', wcDesc:'扫描二维码连接手机钱包',
+    sigNote:'仅签名验证，不会转移任何资产',
+    caLabel:'合约地址 CA', verified:'已验证',
+    renounced:'已放弃权限', lpLocked:'LP 已锁定', copyCa:'复制地址',
+    navProblem:'痛点', navHow:'运作机制', navToko:'代币经济',
+    navStake:'质押', navRoadmap:'路线图', navCommunity:'社区',
+    buyFlap:'Flap 购买 ↗',
+    heroBadge:'Flap 链上线 · 税率仅 1% · 已审计',
+    heroTitle:'每个钱包的<br><span class="accent">收益层</span>',
+    heroSub:'NexYield 是 Flap 链上首个自动复投收益聚合协议——让散户也能享受机构级 DeFi 策略，税率仅 1%。',
+    launchApp:'启动应用 →', learnMore:'了解更多',
+    tvl:'总锁仓量', avgApy:'平均年化', stakers:'活跃质押者', taxRate:'总税率',
+    problemLabel:'核心问题',
+    problemTitle:'散户为何一直输。<br>我们为何而建。',
+    problemSub:'DeFi 收益是真实存在的——但捕获它的基础设施，始终是为巨鲸而建，不是为普通投资者。',
+    pain1Title:'掠夺性税率结构', pain1Desc:'Flap 上大多数 DeFi 代币税率高达 5–15%。NexYield 仅收 1% 固定税率，买卖对等，没有隐藏不对称。', pain1Sol:'✓ 固定 1% 税率 — 买卖相同',
+    pain2Title:'手动复投 = 损失收益', pain2Desc:'手动收割并重新质押奖励需要消耗 Gas 和时间。小钱包因复投滞后损失 20–40% 的潜在收益。', pain2Sol:'✓ 每 8 小时自动复投',
+    pain3Title:'机构策略门槛过高', pain3Desc:'收益优化金库设有 10 万美元起投门槛，普通人无缘参与多协议分散策略。', pain3Sol:'✓ 最低质押仅需 100 枚 NYD',
+    pain4Title:'MEME 波动无实用价值', pain4Desc:'95% 的 Flap 代币毫无底层实用性，纯靠投机。NexYield 产生真实协议收入并分配给质押者。', pain4Sol:'✓ 收入支撑型代币模型',
+    howLabel:'协议机制', howTitle:'NexYield 如何运作', howSub:'四个步骤，享受机构级收益。',
+    step1Title:'连接并存入', step1Desc:'连接钱包，将 NYD 代币存入任意金库。最低 100 枚，无锁仓期。',
+    step2Title:'策略分配', step2Desc:'智能合约将资金分配至经过审计的多协议收益策略——流动性池、借贷、Delta 中性头寸。',
+    step3Title:'自动复投', step3Desc:'每 8 小时自动收割并再投资奖励，无需支付 Gas，24/7 复利运转。',
+    step4Title:'随时提取', step4Desc:'无归属期，无锁仓。随时一笔交易提取本金及所有累积收益。',
+    tokoLabel:'代币经济', tokoTitle:'NYD 代币经济', tokoSub:'为长期可持续性而设计，拒绝拉高出货逻辑。',
+    totalSupply:'总发行量', taxBreakdown:'税率分配（共 1%）',
+    buyTax:'买入税', sellTax:'卖出税', stakerRewards:'→ 质押者奖励',
+    treasury:'→ 协议国库', buyback:'→ 自动回购销毁',
+    tokoStaking:'质押奖励', tokoStakingSub:'4 年内分配给质押者',
+    tokoLp:'流动性池', tokoLpSub:'通过 Unicrypt 锁定 2 年',
+    tokoTeam:'团队 & 顾问', tokoTeamSub:'12 月悬崖期，24 月归属期',
+    tokoEco:'生态基金', tokoEcoSub:'赠款、集成、合作',
+    tokoReserve:'储备金', tokoReserveSub:'DAO 多签治理',
+    tokenDetails:'代币详情', tokenName:'代币名称', network:'网络', supply:'总供应量', tax:'税率 (买/卖)',
+    appLabel:'协议界面', appTitle:'质押 NYD，赚取收益', appSub:'连接钱包，最低 100 枚 NYD，即可开始获取机构级收益。',
+    stakeNYD:'质押 NYD', autoCompound:'自动复投金库 — 每 8 小时结算一次奖励',
+    currentApy:'当前年化（7日均值）', stakedBal:'您的质押余额',
+    claimable:'可领取奖励', nextCompoundLabel:'下次复投',
+    stakeAmount:'质押数量', max:'最大', connectToStake:'连接钱包以质押',
+    managePos:'管理仓位', withdrawNote:'随时提取或领取奖励，无锁仓限制',
+    totalEarned:'总收益（NYD）', portfolioVal:'持仓价值',
+    allTimeEarned:'历史总收益', compoundCycles:'复投次数',
+    unstakeAmount:'提取数量', connectToUnstake:'连接钱包以提取',
+    rewardsDistributed:'已分配奖励',
+    roadmapLabel:'开发时间线', roadmapTitle:'路线图', roadmapSub:'构建完全无许可、社区治理的收益层。',
+    q1Title:'基础建设 ✅', q1a:'智能合约开发', q1b:'安全审计（CertiK）', q1c:'Flap 平台上线', q1d:'流动性池启动',
+    q2Title:'协议上线 ✅', q2a:'V1 质押金库上线', q2b:'自动复投引擎', q2c:'仪表盘 v1', q2d:'二线 CEX 上市',
+    q3Title:'扩展阶段 🔨', q3a:'多策略金库', q3b:'治理代币（veNYD）', q3c:'跨链桥接', q3d:'数据分析仪表盘',
+    q4Title:'DAO & 规模化 🚀', q4a:'完整 DAO 治理', q4b:'机构金库层级', q4c:'移动端 App', q4d:'头部 CEX 上市',
+    communityLabel:'社区 & 社交', communityTitle:'他们都在说什么', communitySub:'10 条推广推文，让世界认识 NexYield。',
+    footerDesc:'Flap 链上下一代收益聚合协议。机构策略，人人可及。',
+    footerProtocol:'协议', footerResources:'资源', footerLegal:'法律',
+    docs:'文档', contract:'智能合约', audit:'审计报告',
+    terms:'使用条款', privacy:'隐私政策', disclaimer:'免责声明', cookie:'Cookie 政策',
+    copyright:'© 2025 NexYield 协议. 版权所有.', operational:'● 协议运行中',
+    toastCopied:'✓ 合约地址已复制！', toastCopiedAddr:'✓ 地址已复制！',
+    toastConnected:(w)=>`✓ ${w} 连接成功！`, toastDisconnected:'已断开连接',
+    toastNoWallet:(w)=>`❌ 未检测到 ${w}，请先安装`, toastRejected:'❌ 用户拒绝了连接请求',
+    toastFailed:(m)=>`❌ 连接失败：${m}`,
+    toastWC:'📱 WalletConnect：请用手机钱包扫描二维码',
+    toastMinStake:'❌ 最低质押数量为 100 NYD',
+    toastStaked:(v)=>`✓ 成功质押 ${v} NYD！`, toastUnstaked:(v)=>`✓ 成功提取 ${v} NYD！`,
+    toastEnterAmount:'❌ 请输入提取数量',
+    copyAddr:'复制地址', viewExplorer:'在浏览器中查看', disconnect:'断开连接',
+    langSwitched:'语言已切换为中文',
+  },
+  en: {
+    connectWallet:'Connect Wallet', selectWallet:'Select your preferred wallet',
+    installed:'Installed', notInstalled:'Not Installed',
+    mmDesc:'Most popular browser wallet', okxDesc:'OKX official Web3 wallet',
+    wcScan:'Scan QR', wcDesc:'Connect mobile wallet via QR code',
+    sigNote:'Signature only — no assets will be transferred',
+    caLabel:'Contract Address (CA)', verified:'Verified',
+    renounced:'Renounced', lpLocked:'LP Locked', copyCa:'Copy Address',
+    navProblem:'Problem', navHow:'How It Works', navToko:'Tokenomics',
+    navStake:'Stake', navRoadmap:'Roadmap', navCommunity:'Community',
+    buyFlap:'Buy on Flap ↗',
+    heroBadge:'Live on Flap · 1% Tax · Audited',
+    heroTitle:'The <span class="accent">Yield Layer</span><br>for Every Wallet',
+    heroSub:'NexYield is the first auto-compounding yield aggregator on Flap — giving retail investors access to institutional-grade DeFi strategies with just 1% tax.',
+    launchApp:'Launch App →', learnMore:'Learn More',
+    tvl:'Total Value Locked', avgApy:'Average APY', stakers:'Active Stakers', taxRate:'Total Tax Rate',
+    problemLabel:'The Problem',
+    problemTitle:'Why Retail Loses.<br>Why We Built This.',
+    problemSub:'DeFi yields are real — but the infrastructure to capture them has always been built for whales, not everyday investors.',
+    pain1Title:'Predatory Tax Structures', pain1Desc:'Most DeFi tokens on Flap charge 5–15% tax. NexYield\'s 1% flat rate is buy/sell equal with no hidden asymmetry.', pain1Sol:'✓ Fixed 1% tax — buy & sell equal',
+    pain2Title:'Manual Compounding = Missed Gains', pain2Desc:'Manually harvesting and restaking rewards costs gas and time. Small wallets lose 20–40% of potential gains to compounding lag.', pain2Sol:'✓ Auto-compound every 8 hours',
+    pain3Title:'Institutional Strategies Are Gated', pain3Desc:'Yield optimization vaults with $100K minimums lock out retail. Diversified multi-protocol strategies remain inaccessible to most.', pain3Sol:'✓ Minimum stake: 100 NYD tokens',
+    pain4Title:'MEME Volatility Without Utility', pain4Desc:'95% of Flap tokens have zero underlying utility. Price is pure speculation. NexYield generates real revenue distributed to stakers.', pain4Sol:'✓ Revenue-backed token model',
+    howLabel:'Protocol Mechanics', howTitle:'How NexYield Works', howSub:'Four steps to institutional-grade yield, democratized.',
+    step1Title:'Connect & Deposit', step1Desc:'Connect your wallet and deposit NYD tokens into any vault. Minimum 100 tokens. No lock-up period.',
+    step2Title:'Strategy Allocation', step2Desc:'Smart contracts distribute funds across audited multi-protocol yield strategies — liquidity pools, lending, and delta-neutral positions.',
+    step3Title:'Auto-Compounding', step3Desc:'Rewards are harvested every 8 hours and reinvested automatically. No gas cost to you. Compound interest works 24/7.',
+    step4Title:'Withdraw Anytime', step4Desc:'No vesting, no lockups. Withdraw your principal plus all accumulated yield at any time with a single transaction.',
+    tokoLabel:'Token Economics', tokoTitle:'NYD Tokenomics', tokoSub:'Designed for long-term sustainability — not pump-and-dump dynamics.',
+    totalSupply:'Total Supply', taxBreakdown:'Tax Breakdown (1% Total)',
+    buyTax:'Buy Tax', sellTax:'Sell Tax', stakerRewards:'→ Staker Rewards',
+    treasury:'→ Protocol Treasury', buyback:'→ Auto-Buyback & Burn',
+    tokoStaking:'Staking Rewards', tokoStakingSub:'Distributed to stakers over 4 years',
+    tokoLp:'Liquidity Pool', tokoLpSub:'Locked 2 years via Unicrypt',
+    tokoTeam:'Team & Advisors', tokoTeamSub:'12-month cliff, 24-month vest',
+    tokoEco:'Ecosystem Fund', tokoEcoSub:'Grants, integrations, partnerships',
+    tokoReserve:'Reserve', tokoReserveSub:'Governed by DAO multisig',
+    tokenDetails:'Token Details', tokenName:'Token Name', network:'Network', supply:'Total Supply', tax:'Tax (Buy/Sell)',
+    appLabel:'Protocol Interface', appTitle:'Stake NYD. Earn Yield.', appSub:'Connect your wallet and start earning institutional-grade yields with a minimum of 100 NYD tokens.',
+    stakeNYD:'Stake NYD', autoCompound:'Auto-compounding vault — rewards every 8 hours',
+    currentApy:'Current APY (7-day avg)', stakedBal:'Your Staked Balance',
+    claimable:'Claimable Rewards', nextCompoundLabel:'Next Compound',
+    stakeAmount:'Amount to Stake', max:'MAX', connectToStake:'Connect Wallet to Stake',
+    managePos:'Manage Position', withdrawNote:'Withdraw or claim rewards at any time, no lockup',
+    totalEarned:'Total Earned (NYD)', portfolioVal:'Portfolio Value',
+    allTimeEarned:'All-time Earnings', compoundCycles:'Compound Cycles',
+    unstakeAmount:'Amount to Unstake', connectToUnstake:'Connect Wallet to Unstake',
+    rewardsDistributed:'Rewards Distributed',
+    roadmapLabel:'Development Timeline', roadmapTitle:'Roadmap', roadmapSub:'Building toward a fully permissionless, community-governed yield layer.',
+    q1Title:'Foundation ✅', q1a:'Smart contract development', q1b:'Security audit (CertiK)', q1c:'Flap launchpad listing', q1d:'Liquidity pool bootstrap',
+    q2Title:'Protocol Launch ✅', q2a:'V1 staking vault live', q2b:'Auto-compound engine', q2c:'Dashboard v1', q2d:'CEX listing (Tier 2)',
+    q3Title:'Expansion 🔨', q3a:'Multi-strategy vaults', q3b:'Governance token (veNYD)', q3c:'Cross-chain bridge', q3d:'Analytics dashboard',
+    q4Title:'DAO & Scale 🚀', q4a:'Full DAO governance', q4b:'Institutional vault tiers', q4c:'Mobile app launch', q4d:'Top-5 CEX listing',
+    communityLabel:'Community & Social', communityTitle:"What They're Saying", communitySub:'10 promotional tweets to spread the word about NexYield.',
+    footerDesc:'The next-generation yield aggregation protocol on Flap. Institutional strategies, democratized for everyone.',
+    footerProtocol:'Protocol', footerResources:'Resources', footerLegal:'Legal',
+    docs:'Documentation', contract:'Smart Contract', audit:'Audit Report',
+    terms:'Terms of Use', privacy:'Privacy Policy', disclaimer:'Disclaimer', cookie:'Cookie Policy',
+    copyright:'© 2025 NexYield Protocol. All rights reserved.', operational:'● Protocol Operational',
+    toastCopied:'✓ Contract address copied!', toastCopiedAddr:'✓ Address copied!',
+    toastConnected:(w)=>`✓ ${w} connected!`, toastDisconnected:'Disconnected',
+    toastNoWallet:(w)=>`❌ ${w} not detected. Please install first.`, toastRejected:'❌ User rejected the connection request.',
+    toastFailed:(m)=>`❌ Connection failed: ${m}`,
+    toastWC:'📱 WalletConnect: Open your mobile wallet and scan the QR code',
+    toastMinStake:'❌ Minimum stake is 100 NYD',
+    toastStaked:(v)=>`✓ Successfully staked ${v} NYD!`, toastUnstaked:(v)=>`✓ Successfully unstaked ${v} NYD!`,
+    toastEnterAmount:'❌ Enter an amount to unstake',
+    copyAddr:'Copy Address', viewExplorer:'View on Explorer', disconnect:'Disconnect',
+    langSwitched:'Language switched to English',
+  }
+};
+
+function t(key,...args){
+  const v=STRINGS[currentLang][key];
+  return typeof v==='function'?v(...args):v??key;
+}
+
+function applyTranslations(){
+  document.querySelectorAll('[data-i18n]').forEach(el=>{
+    const key=el.getAttribute('data-i18n');
+    if(STRINGS[currentLang][key]!==undefined){
+      // Use innerHTML for keys that may contain HTML tags
+      const htmlKeys=['heroTitle','heroSub','problemTitle','problemSub'];
+      if(htmlKeys.includes(key)) el.innerHTML=t(key);
+      else el.textContent=t(key);
+    }
+  });
+  // Update page title
+  document.title = currentLang==='zh'?'NexYield — 下一代收益协议':'NexYield — Next Generation Yield Protocol';
+  document.documentElement.lang = currentLang==='zh'?'zh-CN':'en';
+  // Update staking buttons if not connected
+  if(!connectedAddress){
+    document.getElementById('stakeBtn').textContent=t('connectToStake');
+    document.getElementById('unstakeBtn').textContent=t('connectToUnstake');
+  }
+  // Update wallet installed tags
+  document.getElementById('mm-installed').textContent = window.ethereum?t('installed'):t('notInstalled');
+  document.getElementById('okx-installed').textContent = window.okxwallet?t('installed'):t('notInstalled');
+}
+
+function setLang(lang){
+  currentLang=lang;
+  document.getElementById('btnZH').classList.toggle('active',lang==='zh');
+  document.getElementById('btnEN').classList.toggle('active',lang==='en');
+  applyTranslations();
+  showToast(t('langSwitched'),'success');
+}
+
+// ─── Toast ─────────────────────────────────────────────
 let toastTimer;
-function showToast(msg, type='') {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.className = 'toast show' + (type ? ' '+type : '');
+function showToast(msg,type=''){
+  const el=document.getElementById('toast');
+  el.textContent=msg;
+  el.className='toast show'+(type?' '+type:'');
   clearTimeout(toastTimer);
-  toastTimer = setTimeout(()=>t.classList.remove('show'), 3200);
+  toastTimer=setTimeout(()=>el.classList.remove('show'),3200);
 }
 
-// ─── Copy CA ──────────────────────────────────────────
-function copyCA() {
-  navigator.clipboard.writeText(CA).then(()=>showToast('✓ Contract address copied!','success'));
+// ─── Copy CA ───────────────────────────────────────────
+function copyCA(){
+  navigator.clipboard.writeText(CA_ADDRESS).then(()=>showToast(t('toastCopied'),'success'));
 }
 
-// ─── Wallet Modal ─────────────────────────────────────
-function openWalletModal() {
+// ─── Wallet Modal ──────────────────────────────────────
+function openWalletModal(){
   document.getElementById('walletModal').classList.add('active');
-  // Detect wallets
-  if (!window.ethereum) {
-    document.getElementById('mm-installed').textContent = 'Not Installed';
-    document.getElementById('mm-installed').className = 'w-tag w-tag-blue';
-  }
-  if (!window.okxwallet) {
-    document.getElementById('okx-installed').textContent = 'Not Installed';
-    document.getElementById('okx-installed').className = 'w-tag w-tag-blue';
-  }
+  document.getElementById('mm-installed').textContent=window.ethereum?t('installed'):t('notInstalled');
+  document.getElementById('mm-installed').className=window.ethereum?'w-tag w-tag-green':'w-tag w-tag-blue';
+  document.getElementById('okx-installed').textContent=window.okxwallet?t('installed'):t('notInstalled');
+  document.getElementById('okx-installed').className=window.okxwallet?'w-tag w-tag-green':'w-tag w-tag-blue';
 }
-function closeWalletModal() {
+function closeWalletModal(){
   document.getElementById('walletModal').classList.remove('active');
   resetWalletItems();
 }
-document.getElementById('walletModal').addEventListener('click', e => {
-  if (e.target === document.getElementById('walletModal')) closeWalletModal();
+document.getElementById('walletModal').addEventListener('click',e=>{
+  if(e.target===document.getElementById('walletModal'))closeWalletModal();
 });
-
-function resetWalletItems() {
+function resetWalletItems(){
   document.querySelectorAll('.wallet-option').forEach(w=>{
     w.classList.remove('connecting');
-    const arrow = w.querySelector('.w-arrow');
-    const spinner = w.querySelector('.w-spinner');
-    if (arrow) arrow.style.display='';
-    if (spinner) spinner.remove();
+    const arrow=w.querySelector('.w-arrow');
+    const sp=w.querySelector('.w-spinner');
+    if(arrow)arrow.style.display='';
+    if(sp)sp.remove();
   });
 }
-
-async function connectWallet(el, walletName) {
-  const provider = walletName === 'OKX Wallet' ? window.okxwallet : window.ethereum;
-  if (!provider) {
-    showToast(`❌ ${walletName} not detected. Please install first.`, 'error');
-    const url = walletName === 'MetaMask' ? 'https://metamask.io/download/' : 'https://www.okx.com/web3';
-    window.open(url, '_blank');
+async function connectWallet(el,walletName){
+  const provider=walletName==='OKX Wallet'?window.okxwallet:window.ethereum;
+  if(!provider){
+    showToast(t('toastNoWallet',walletName),'error');
+    window.open(walletName==='MetaMask'?'https://metamask.io/download/':'https://www.okx.com/web3','_blank');
     return;
   }
   resetWalletItems();
   el.classList.add('connecting');
-  const arrow = el.querySelector('.w-arrow');
-  arrow.style.display = 'none';
-  const sp = document.createElement('div'); sp.className = 'w-spinner';
-  el.appendChild(sp);
-  try {
-    const accounts = await provider.request({ method: 'eth_requestAccounts' });
-    onConnected(accounts[0], walletName, provider);
-  } catch(err) {
+  el.querySelector('.w-arrow').style.display='none';
+  const sp=document.createElement('div');sp.className='w-spinner';el.appendChild(sp);
+  try{
+    const accounts=await provider.request({method:'eth_requestAccounts'});
+    onConnected(accounts[0],walletName,provider);
+  }catch(err){
     resetWalletItems();
-    if (err.code === 4001) showToast('❌ Connection rejected by user.', 'error');
-    else showToast('❌ Connection failed: ' + err.message, 'error');
+    if(err.code===4001)showToast(t('toastRejected'),'error');
+    else showToast(t('toastFailed',err.message),'error');
   }
 }
-
-function showWCQR(el) {
-  resetWalletItems();
-  el.classList.add('connecting');
+function showWCQR(el){
+  resetWalletItems();el.classList.add('connecting');
   el.querySelector('.w-arrow').style.display='none';
-  const sp = document.createElement('div'); sp.className = 'w-spinner'; el.appendChild(sp);
-  setTimeout(()=>{
-    showToast('📱 WalletConnect: Open your mobile wallet and scan the QR code', '');
-    resetWalletItems();
-  }, 1500);
+  const sp=document.createElement('div');sp.className='w-spinner';el.appendChild(sp);
+  setTimeout(()=>{showToast(t('toastWC'),'');resetWalletItems();},1500);
 }
-
-function onConnected(address, walletName, provider) {
-  connectedAddress = address;
+function onConnected(address,walletName,provider){
+  connectedAddress=address;
   closeWalletModal();
-  showToast(`✓ ${walletName} connected!`, 'success');
+  showToast(t('toastConnected',walletName),'success');
   renderAddressBtn(address);
   enableStaking();
-  // Account change listener
-  provider.on('accountsChanged', accs => {
-    if (!accs.length) disconnectWallet();
-    else { connectedAddress = accs[0]; renderAddressBtn(accs[0]); }
+  provider.on('accountsChanged',accs=>{
+    if(!accs.length)disconnectWallet();
+    else{connectedAddress=accs[0];renderAddressBtn(accs[0]);}
   });
 }
-
-function renderAddressBtn(addr) {
-  const short = addr.slice(0,6)+'...'+addr.slice(-4);
-  const wrap = document.getElementById('navRight');
-  wrap.innerHTML = `
-    <button class="btn-outline" onclick="window.open('https://flap.sh','_blank')">Buy on Flap ↗</button>
+function renderAddressBtn(addr){
+  const short=addr.slice(0,6)+'...'+addr.slice(-4);
+  // Keep lang toggle + buy button, rebuild connect area
+  const navRight=document.getElementById('navRight');
+  navRight.innerHTML=`
+    <div class="lang-toggle">
+      <button class="lang-btn ${currentLang==='zh'?'active':''}" id="btnZH" onclick="setLang('zh')">中文</button>
+      <div class="lang-divider"></div>
+      <button class="lang-btn ${currentLang==='en'?'active':''}" id="btnEN" onclick="setLang('en')">EN</button>
+    </div>
+    <button class="btn-outline" onclick="window.open('https://flap.sh','_blank')" data-i18n="buyFlap">${t('buyFlap')}</button>
     <div class="addr-wrap">
       <button class="addr-btn" onclick="toggleAddrDropdown(event)">
         <span class="addr-dot"></span>${short}
@@ -1417,124 +1144,98 @@ function renderAddressBtn(addr) {
       <div class="addr-dropdown" id="addrDrop">
         <div class="addr-item" onclick="copyAddr()">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-          Copy Address
+          ${t('copyAddr')}
         </div>
         <div class="addr-item" onclick="window.open('https://etherscan.io/address/${addr}','_blank')">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-          View on Explorer
+          ${t('viewExplorer')}
         </div>
         <div class="addr-divider"></div>
         <div class="addr-item danger" onclick="disconnectWallet()">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
-          Disconnect
+          ${t('disconnect')}
         </div>
       </div>
     </div>`;
 }
-
-function toggleAddrDropdown(e) {
-  e.stopPropagation();
-  document.getElementById('addrDrop')?.classList.toggle('open');
-}
-document.addEventListener('click', () => document.getElementById('addrDrop')?.classList.remove('open'));
-
-function copyAddr() {
-  navigator.clipboard.writeText(connectedAddress).then(()=>showToast('✓ Address copied!','success'));
-  document.getElementById('addrDrop')?.classList.remove('open');
-}
-
-function disconnectWallet() {
-  connectedAddress = null;
-  const wrap = document.getElementById('navRight');
-  wrap.innerHTML = `
-    <button class="btn-outline" onclick="window.open('https://flap.sh','_blank')">Buy on Flap ↗</button>
-    <button class="btn-connect" onclick="openWalletModal()">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-        <path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/><path d="M18 12a2 2 0 0 0 0 4h4v-4z"/>
-      </svg>
-      Connect Wallet
+function toggleAddrDropdown(e){e.stopPropagation();document.getElementById('addrDrop')?.classList.toggle('open');}
+document.addEventListener('click',()=>document.getElementById('addrDrop')?.classList.remove('open'));
+function copyAddr(){navigator.clipboard.writeText(connectedAddress).then(()=>showToast(t('toastCopiedAddr'),'success'));document.getElementById('addrDrop')?.classList.remove('open');}
+function disconnectWallet(){
+  connectedAddress=null;
+  const nr=document.getElementById('navRight');
+  nr.innerHTML=`
+    <div class="lang-toggle">
+      <button class="lang-btn ${currentLang==='zh'?'active':''}" id="btnZH" onclick="setLang('zh')">中文</button>
+      <div class="lang-divider"></div>
+      <button class="lang-btn ${currentLang==='en'?'active':''}" id="btnEN" onclick="setLang('en')">EN</button>
+    </div>
+    <button class="btn-outline" onclick="window.open('https://flap.sh','_blank')" data-i18n="buyFlap">${t('buyFlap')}</button>
+    <button class="btn-connect" id="connectBtn" onclick="openWalletModal()">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/><path d="M18 12a2 2 0 0 0 0 4h4v-4z"/></svg>
+      <span data-i18n="connectWallet">${t('connectWallet')}</span>
     </button>`;
   disableStaking();
-  showToast('Disconnected', '');
+  showToast(t('toastDisconnected'),'');
 }
 
-// ─── Staking UI ───────────────────────────────────────
-function enableStaking() {
-  const stakeBtn = document.getElementById('stakeBtn');
-  const unstakeBtn = document.getElementById('unstakeBtn');
-  stakeBtn.disabled = false;
-  stakeBtn.textContent = 'Stake NYD';
-  unstakeBtn.disabled = false;
-  unstakeBtn.textContent = 'Unstake NYD';
-  document.getElementById('stakedBal').textContent = '0 NYD';
-  document.getElementById('claimable').textContent = '0.00 NYD';
-  document.getElementById('portfolioVal').textContent = '$0.00';
-  document.getElementById('allTimeEarned').textContent = '+0.00 NYD';
-  document.getElementById('compoundCycles').textContent = '0';
+// ─── Staking ───────────────────────────────────────────
+function enableStaking(){
+  document.getElementById('stakeBtn').disabled=false;
+  document.getElementById('stakeBtn').textContent=t('stakeNYD');
+  document.getElementById('unstakeBtn').disabled=false;
+  document.getElementById('unstakeBtn').textContent=t('managePos');
+  document.getElementById('stakedBal').textContent='0 NYD';
+  document.getElementById('claimable').textContent='0.00 NYD';
+  document.getElementById('portfolioVal').textContent='$0.00';
+  document.getElementById('allTimeEarned').textContent='+0.00 NYD';
+  document.getElementById('compoundCycles').textContent='0';
   startCountdown();
 }
-function disableStaking() {
-  document.getElementById('stakeBtn').disabled = true;
-  document.getElementById('stakeBtn').textContent = 'Connect Wallet to Stake';
-  document.getElementById('unstakeBtn').disabled = true;
-  document.getElementById('unstakeBtn').textContent = 'Connect Wallet to Unstake';
+function disableStaking(){
+  document.getElementById('stakeBtn').disabled=true;
+  document.getElementById('stakeBtn').textContent=t('connectToStake');
+  document.getElementById('unstakeBtn').disabled=true;
+  document.getElementById('unstakeBtn').textContent=t('connectToUnstake');
   clearInterval(countdownInterval);
 }
-function setMax(id) {
-  if (!connectedAddress) { openWalletModal(); return; }
-  document.getElementById(id).value = '1000';
+function setMax(id){if(!connectedAddress){openWalletModal();return;}document.getElementById(id).value='1000';}
+function handleStake(){
+  if(!connectedAddress){openWalletModal();return;}
+  const v=parseFloat(document.getElementById('stakeInput').value);
+  if(!v||v<100){showToast(t('toastMinStake'),'error');return;}
+  showToast(t('toastStaked',v),'success');
+  document.getElementById('stakeInput').value='';
+  document.getElementById('stakedBal').textContent=v+' NYD';
+  document.getElementById('portfolioVal').textContent='$'+(v*0.0042).toFixed(2);
 }
-function handleStake() {
-  if (!connectedAddress) { openWalletModal(); return; }
-  const v = parseFloat(document.getElementById('stakeInput').value);
-  if (!v || v < 100) { showToast('❌ Minimum stake is 100 NYD', 'error'); return; }
-  showToast(`✓ Successfully staked ${v} NYD!`, 'success');
-  document.getElementById('stakeInput').value = '';
-  document.getElementById('stakedBal').textContent = v + ' NYD';
-  document.getElementById('portfolioVal').textContent = '$' + (v * 0.0042).toFixed(2);
+function handleUnstake(){
+  if(!connectedAddress){openWalletModal();return;}
+  const v=parseFloat(document.getElementById('unstakeInput').value);
+  if(!v||v<=0){showToast(t('toastEnterAmount'),'error');return;}
+  showToast(t('toastUnstaked',v),'success');
+  document.getElementById('unstakeInput').value='';
 }
-function handleUnstake() {
-  if (!connectedAddress) { openWalletModal(); return; }
-  const v = parseFloat(document.getElementById('unstakeInput').value);
-  if (!v || v <= 0) { showToast('❌ Enter an amount to unstake', 'error'); return; }
-  showToast(`✓ Successfully unstaked ${v} NYD!`, 'success');
-  document.getElementById('unstakeInput').value = '';
-}
-
-// Countdown to next compound
 let countdownInterval;
-function startCountdown() {
-  const eightHours = 8 * 60 * 60;
-  let secs = eightHours;
-  clearInterval(countdownInterval);
-  countdownInterval = setInterval(()=>{
-    secs--;
-    if (secs < 0) secs = eightHours;
-    const h = Math.floor(secs/3600);
-    const m = Math.floor((secs%3600)/60);
-    const s = secs%60;
-    document.getElementById('nextCompound').textContent =
-      `${h}h ${String(m).padStart(2,'0')}m ${String(s).padStart(2,'0')}s`;
-  }, 1000);
+function startCountdown(){
+  const H=8*3600;let s=H;clearInterval(countdownInterval);
+  countdownInterval=setInterval(()=>{
+    s--;if(s<0)s=H;
+    const h=Math.floor(s/3600),m=Math.floor((s%3600)/60),ss=s%60;
+    document.getElementById('nextCompound').textContent=`${h}h ${String(m).padStart(2,'0')}m ${String(ss).padStart(2,'0')}s`;
+  },1000);
 }
 
-// ─── Scroll nav shrink ─────────────────────────────────
+// ─── Scroll & init ─────────────────────────────────────
 window.addEventListener('scroll',()=>{
-  const nav = document.getElementById('navbar');
-  if (window.scrollY > 50) nav.style.padding = '12px 48px';
-  else nav.style.padding = '18px 48px';
+  const nav=document.getElementById('navbar');
+  const banner=document.getElementById('ca-banner');
+  if(window.scrollY>50){nav.style.padding='12px 48px';banner.style.top='61px';}
+  else{nav.style.padding='16px 48px';banner.style.top='69px';}
 });
 
-// ─── Detect installed wallets on load ─────────────────
 window.addEventListener('load',()=>{
-  if (!window.ethereum) {
-    document.getElementById('mm-installed').textContent = 'Not Installed';
-    document.getElementById('mm-installed').className = 'w-tag w-tag-blue';
-  }
-  if (!window.okxwallet) {
-    document.getElementById('okx-installed').textContent = 'Not Installed';
-    document.getElementById('okx-installed').className = 'w-tag w-tag-blue';
-  }
+  applyTranslations(); // Apply default zh translations
 });
 </script>
 </body>
